@@ -7,10 +7,10 @@ const RestaurantMenuItemSchema = new mongoose.Schema(
     price: { type: mongoose.Decimal128, required: true },
     taxInclusive: {
       type: mongoose.Decimal128,
-      required: true,
       min: 0,
       max: 1,
       default: 0.2,
+      required: true,
     },
   },
   { timestamps: true },
