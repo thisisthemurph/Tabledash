@@ -1,5 +1,5 @@
 import { getRestaurantById } from "./restaurant.methods.js";
-import { MenuNotFoundError } from "./method.errors.js";
+import { MenuNotFoundError } from "./errors.js";
 
 export async function getRestaurantMenuById(restaurantId, menuId) {
   const restaurant = await getRestaurantById(restaurantId);

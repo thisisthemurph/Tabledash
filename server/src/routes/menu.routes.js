@@ -4,7 +4,7 @@ import {
   addMenuToRestaurant,
   getRestaurantMenuById,
   deleteRestaurantMenuById,
-} from "../methods/menu.methods.js";
+} from "../controllers/menu.methods.js";
 
 const router = express.Router();
 

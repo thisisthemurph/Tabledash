@@ -1,5 +1,5 @@
-import RestaurantModel from "../schemas/RestaurauntSchema.js";
-import { RestaurantNotFoundError } from "./method.errors.js";
+import RestaurantModel from "../models/RestaurauntSchema.js";
+import { RestaurantNotFoundError } from "./errors.js";
 
 export async function createRestaurant(restaurantData) {
   const restaurant = new RestaurantModel(restaurantData);

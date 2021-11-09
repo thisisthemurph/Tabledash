@@ -1,14 +1,15 @@
 import express from "express";
 
-import connectToDatabase from "./database/db.js";
-import restaurantRoutes from "./routes/restaurant.routes.js";
-import menuRoutes from "./routes/menu.routes.js";
-import menuItemRoutes from "./routes/menuItem.routes.js";
+import { PORT } from "./config.js";
+import connectToDatabase from "./src/database/db.js";
+import restaurantRoutes from "./src/routes/restaurant.routes.js";
+import menuRoutes from "./src/routes/menu.routes.js";
+import menuItemRoutes from "./src/routes/menuItem.routes.js";
 import {
   logErrors,
   errorHandler,
   notFoundErrorHandler,
-} from "./errorHandlers.js";
+} from "./src/middleware/errorHandlers.js";
 
 const app = express();
 app.use(express.json());
@@ -22,8 +23,7 @@ app.use(logErrors);
 app.use(errorHandler);
 app.use(notFoundErrorHandler);
 
-const port = process.env.PORT | 3000;
-app.listen(port, (req, res) => {
+app.listen(PORT, (req, res) => {
   connectToDatabase();
-  console.log(`Magic is happening on port ${port} 😎`);
+  console.log(`Magic is happening on port ${PORT} 😎`);
 });

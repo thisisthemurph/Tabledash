@@ -1,13 +1,9 @@
 import mongoose from "mongoose";
 
-const username = "mike";
-const password = "simplepassword";
-const cluster = "development-cluster.vqxd1";
-const dbname = "tabledash";
+import { DB_CONNECTION_STRING } from "../../config.js";
 
 const connectToDatabase = async () => {
-  const mongoDB = `mongodb+srv://${username}:${password}@${cluster}.mongodb.net/${dbname}?retryWrites=true&w=majority`;
-  mongoose.connect(mongoDB, {
+  mongoose.connect(DB_CONNECTION_STRING, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   });

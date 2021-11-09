@@ -1,6 +1,6 @@
 import express from "express";
 
-import { addItemToMenu } from "../methods/menuItem.methods.js";
+import { addItemToMenu } from "../controllers/menuItem.methods.js";
 
 const router = express.Router();
 
