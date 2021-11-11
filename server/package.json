@@ -2,16 +2,18 @@
   "name": "tabledash-server",
   "version": "1.0.0",
   "description": "API for the Tabledash web application",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon src/server.js"
   },
   "author": "Michael Murphy",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "mongoose": "^6.0.12"
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.15"
   },
   "type": "module"
 }
