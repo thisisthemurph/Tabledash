@@ -1,4 +1,3 @@
-import makeError from "../helpers/httpError.js";
 import makeHttpError from "../helpers/httpError.js";
 import makeHttpResponse from "../helpers/httpResponse.js";
 import makeRestaurant from "./restaurant.js";
@@ -67,7 +66,6 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
         : await restaurantList.findById({ restaurantId: id });
 
       return makeHttpResponse({
-        statusCode: 200,
         data: fetchAllRestaurants
           ? { restaurants: result }
           : { restaurant: result },
@@ -85,7 +83,7 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
 
     try {
       const deleted = await restaurantList.remove({ restaurantId: id });
-      return makeHttpResponse({ statusCode: 200, data: { deleted } });
+      return makeHttpResponse({ data: { deleted } });
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
