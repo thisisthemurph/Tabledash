@@ -33,7 +33,11 @@ export default function makeMenuEndpointHandler({ menuList }) {
       });
     }
 
-    menuInfo = jsonOrHttpError(menuInfo);
+    // Decode JSON or send an error if not JSON
+    const jsonResult = jsonOrHttpError(menuInfo);
+    if (jsonResult.errorMessage) {
+      return jsonResult;
+    }
 
     try {
       const created = await menuList.add({ restaurantId, ...menuInfo });
@@ -45,7 +49,7 @@ export default function makeMenuEndpointHandler({ menuList }) {
       console.log(e);
       return makeHttpError({
         errorMessage: error.message,
-        statusCode: error.statusCode() || 500,
+        statusCode: error.status || 500,
       });
     }
   }
@@ -80,7 +84,7 @@ export default function makeMenuEndpointHandler({ menuList }) {
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
-        statusCode: error.statusCode() || 500,
+        statusCode: error.status || 500,
       });
     }
   }

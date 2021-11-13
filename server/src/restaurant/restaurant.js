@@ -27,6 +27,11 @@ export default function makeRestaurant(restaurantInfo) {
     };
   }
 
+  /**
+   * Validats and normalizes an array of menus
+   * @param {Array[]} menus an array of menu documents
+   * @returns an array of valid normalized Menu objects
+   */
   function validateAndNormalizeMenus(menus) {
     if (menus) {
       return menus.map(makeMenu);

@@ -33,28 +33,21 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
       });
     }
 
-    // if (typeof restaurantInfo === "string") {
-    //   try {
-    //     restaurantInfo = JSON.parse(restaurantInfo);
-    //   } catch {
-    //     makeHttpError({
-    //       statusCode: 400,
-    //       errorMessage: "Bad request. POST body must be valid JSON.",
-    //     });
-    //   }
-    // }
-
-    restaurantInfo = jsonOrHttpError(restaurantInfo);
+    const jsonResult = jsonOrHttpError(restaurantInfo);
+    // Error if the data was not JSON
+    if (jsonResult.errorMessage) {
+      return jsonResult;
+    }
 
     try {
-      const restaurant = makeRestaurant(restaurantInfo);
+      const restaurant = makeRestaurant(jsonResult);
       const created = await restaurantList.add(restaurant);
 
       return makeHttpResponse({ statusCode: 201, data: { created } });
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
-        statusCode: error.statusCode() || 500,
+        statusCode: error.status || 500,
       });
     }
   }
@@ -76,7 +69,7 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
-        statusCode: error.statusCode() || 500,
+        statusCode: error.status || 500,
       });
     }
   }
@@ -90,7 +83,7 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
-        statusCode: error.statusCode() || 500,
+        statusCode: error.status || 500,
       });
     }
   }

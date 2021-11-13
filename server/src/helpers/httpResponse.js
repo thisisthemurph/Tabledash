@@ -1,8 +1,9 @@
 /**
  * Makes a standardised HTTP response object
- * @param {number} statusCode the HTTP status code, defaults to 200
- * @param {Object} data the data object to be sent with the response, defaults to null
- * @returns             a response object
+ * @param {Object[]} response the response object
+ * @param {Number} response.statusCode the HTTP status code, defaults to 200
+ * @param {Object} response.data the data object to be sent with the response, defaults to null
+ * @returns a response object
  */
 export default function makeHttpResponse({ statusCode = 200, data = null }) {
   const response = {
