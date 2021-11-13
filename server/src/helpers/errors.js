@@ -15,8 +15,10 @@ export class RestaurantNotFoundError extends Error {
 }
 
 export class MenuNotFoundError extends Error {
-  constructor() {
-    super("No menu located with the given ID for the given restaurant.");
+  constructor(restaurantId, menuId) {
+    super(
+      `Menu with ID ${menuId} could not be found for restaurant with ID ${restaurantId}.`
+    );
     this.status = 404;
 
     if (Error.captureStackTrace) {

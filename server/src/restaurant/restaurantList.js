@@ -47,7 +47,7 @@ export default function makeRestaurantList({ RestaurantModel }) {
       throw new RestaurantNotFoundError(restaurantId);
     }
 
-    return deleted;
+    return modelToRestaurant(deleted);
   }
 
   function modelToRestaurant({ _id: restaurantId, ...model }) {

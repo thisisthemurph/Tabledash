@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 
-export const PORT = process.env.PORT | 3000;
+export const PORT = process.env.PORT || 3000;
 
 // Database connection string values
 export const DB_USERNAME = process.env.DB_USERNAME;

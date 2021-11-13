@@ -4,6 +4,7 @@ import { PORT } from "../config.js";
 import connectToDatabase from "./database/db.js";
 import adaptRequest from "./helpers/adaptRequest.js";
 import handleRestaurantRequest from "./restaurant/index.js";
+import handleRestaurantMenuRequest from "./restaurantMenu/index.js";
 import {
   logErrors,
   errorHandler,
@@ -18,8 +19,9 @@ app.all("/api/restaurant", restaurantController);
 app.get("/api/restaurant/:id", restaurantController);
 app.delete("/api/restaurant/:id", restaurantController);
 
-// app.all("/api/testaurant/:restaurantId/menu", CONTROLLER)
-// app.get("/api/restaurant/:restaurantId/menu/:menuId", CONTROLLER)
+app.all("/api/restaurant/:restaurantId/menu", menuController);
+app.get("/api/restaurant/:restaurantId/menu/:menuId", menuController);
+app.delete("/api/restaurant/:restaurantId/menu/:menuId", menuController);
 
 function restaurantController(req, res) {
   const httpRequest = adaptRequest(req);
@@ -27,7 +29,16 @@ function restaurantController(req, res) {
     .then(({ headers, statusCode, data }) =>
       res.set(headers).status(statusCode).send(data)
     )
-    .catch((_) => res.status(500).end());
+    .catch((e) => res.status(500).end());
+}
+
+function menuController(req, res) {
+  const httpRequest = adaptRequest(req);
+  handleRestaurantMenuRequest(httpRequest)
+    .then(({ headers, statusCode, data }) =>
+      res.set(headers).status(statusCode).send(data)
+    )
+    .catch((e) => res.status(500).end());
 }
 
 app.use(logErrors);

@@ -1,5 +1,6 @@
 import makeHttpError from "../helpers/httpError.js";
 import makeHttpResponse from "../helpers/httpResponse.js";
+import jsonOrHttpError from "../helpers/jsonOrHttpError.js";
 import makeRestaurant from "./restaurant.js";
 
 export default function makeRestaurantEndpointHandler({ restaurantList }) {
@@ -32,16 +33,18 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
       });
     }
 
-    if (typeof restaurantInfo === "string") {
-      try {
-        restaurantInfo = JSON.parse(restaurantInfo);
-      } catch {
-        makeHttpError({
-          statusCode: 400,
-          errorMessage: "Bad request. POST body must be valid JSON.",
-        });
-      }
-    }
+    // if (typeof restaurantInfo === "string") {
+    //   try {
+    //     restaurantInfo = JSON.parse(restaurantInfo);
+    //   } catch {
+    //     makeHttpError({
+    //       statusCode: 400,
+    //       errorMessage: "Bad request. POST body must be valid JSON.",
+    //     });
+    //   }
+    // }
+
+    restaurantInfo = jsonOrHttpError(restaurantInfo);
 
     try {
       const restaurant = makeRestaurant(restaurantInfo);
