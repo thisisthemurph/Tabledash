@@ -1,8 +1,6 @@
 import { InvalidPropertyError } from "../helpers/errors.js";
 
 export default function makeMenu(menuInfo) {
-  console.log("MENU INFO");
-  console.log(menuInfo);
   const validMenu = validate(menuInfo);
   const normalMenu = normalize(validMenu);
   return Object.freeze(normalMenu);

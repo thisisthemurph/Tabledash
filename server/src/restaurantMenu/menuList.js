@@ -15,20 +15,17 @@ export default function makeMenuList({ RestaurantModel }) {
    * @returns an object representing the added menu
    */
   async function add({ restaurantId, ...menuInfo }) {
-    try {
-      const restaurant = await RestaurantModel.findById(restaurantId);
+    const restaurant = await RestaurantModel.findById(restaurantId);
 
-      if (!restaurant) {
-        throw new RestaurantNotFoundError(restaurantId);
-      }
-
-      let menu = makeMenu({ ...menuInfo });
-      restaurant.menus.push(menu);
-      await restaurant.save();
-      return menu;
-    } catch (e) {
-      console.log(e);
+    if (!restaurant) {
+      throw new RestaurantNotFoundError(restaurantId);
     }
+
+    let menu = makeMenu({ ...menuInfo });
+    restaurant.menus.push(menu);
+
+    const updated = await restaurant.save();
+    return modelToMenu(updated.menus[updated.menus.length - 1]._doc);
   }
 
   /**
@@ -70,9 +67,9 @@ export default function makeMenuList({ RestaurantModel }) {
   /**
    * Removes a menu from the database based on the restaurantId and menuId
    * @param {Object[]} data
-   * @param {Object[]} data.restaurantId the ID of the restaurant the menu belongs to
-   * @param {Object[]} data.menuId the ID of the menu to be removed
-   * @returnsan object representing the removed menu
+   * @param {String} data.restaurantId the ID of the restaurant the menu belongs to
+   * @param {String} data.menuId the ID of the menu to be removed
+   * @returns an object representing the removed menu
    */
   async function removeById({ restaurantId, menuId }) {
     const restaurant = await RestaurantModel.findById(restaurantId);

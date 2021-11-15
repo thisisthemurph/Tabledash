@@ -1,6 +1,6 @@
 import express from "express";
 
-import { PORT } from "../config.js";
+import { PORT, ENVIRONMENT } from "../config.js";
 import connectToDatabase from "./database/db.js";
 import adaptRequest from "./helpers/adaptRequest.js";
 import handleRestaurantRequest from "./restaurant/index.js";
@@ -11,17 +11,37 @@ import {
   notFoundErrorHandler,
 } from "./middleware/errorHandlers.js";
 
-const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+export async function createServer() {
+  await connectToDatabase();
+  const app = express();
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
-app.all("/api/restaurant", restaurantController);
-app.get("/api/restaurant/:id", restaurantController);
-app.delete("/api/restaurant/:id", restaurantController);
+  // Endpoints
 
-app.all("/api/restaurant/:restaurantId/menu", menuController);
-app.get("/api/restaurant/:restaurantId/menu/:menuId", menuController);
-app.delete("/api/restaurant/:restaurantId/menu/:menuId", menuController);
+  app.all("/api/restaurant", restaurantController);
+  app.get("/api/restaurant/:id", restaurantController);
+  app.delete("/api/restaurant/:id", restaurantController);
+
+  app.all("/api/restaurant/:restaurantId/menu", menuController);
+  app.get("/api/restaurant/:restaurantId/menu/:menuId", menuController);
+  app.delete("/api/restaurant/:restaurantId/menu/:menuId", menuController);
+
+  // Error middleware
+
+  app.use(logErrors);
+  app.use(errorHandler);
+  app.use(notFoundErrorHandler);
+
+  return app;
+}
+
+async function startServer() {
+  const app = await createServer();
+  app.listen({ port: PORT }, async () => {
+    console.log(`Server is listening on port ${PORT}`);
+  });
+}
 
 function restaurantController(req, res) {
   const httpRequest = adaptRequest(req);
@@ -41,11 +61,6 @@ function menuController(req, res) {
     .catch((e) => res.status(500).end());
 }
 
-app.use(logErrors);
-app.use(errorHandler);
-app.use(notFoundErrorHandler);
-
-app.listen(PORT, (req, res) => {
-  connectToDatabase();
-  console.log(`Magic is happening on port ${PORT} 😎`);
-});
+if (ENVIRONMENT === "dev") {
+  startServer();
+}

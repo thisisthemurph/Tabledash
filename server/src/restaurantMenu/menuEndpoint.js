@@ -46,7 +46,6 @@ export default function makeMenuEndpointHandler({ menuList }) {
         data: { created },
       });
     } catch (e) {
-      console.log(e);
       return makeHttpError({
         errorMessage: error.message,
         statusCode: error.status || 500,
@@ -75,8 +74,6 @@ export default function makeMenuEndpointHandler({ menuList }) {
 
   async function deleteMenu(httpRequest) {
     const { restaurantId, menuId } = httpRequest.pathParams;
-
-    console.log({ restaurantId, menuId });
 
     try {
       const deleted = await menuList.removeById({ restaurantId, menuId });

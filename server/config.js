@@ -2,6 +2,10 @@ import dotenv from "dotenv";
 dotenv.config();
 
 export const PORT = process.env.PORT || 3000;
+export const ENVIRONMENT =
+  process.env.NODE_ENV === "dev" || process.env.NODE_ENV === "development"
+    ? "dev"
+    : process.env.NODE_ENV;
 
 // Database connection string values
 export const DB_USERNAME = process.env.DB_USERNAME;

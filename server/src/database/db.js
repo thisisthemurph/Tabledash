@@ -1,12 +1,16 @@
 import mongoose from "mongoose";
-
 import { DB_CONNECTION_STRING } from "../../config.js";
 
-const connectToDatabase = async () => {
-  mongoose.connect(DB_CONNECTION_STRING, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+let connection;
+export default async function connectToDatabase() {
+  connection = mongoose
+    .connect(DB_CONNECTION_STRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
+    .then((dbConnection) => {
+      connection = dbConnection;
+    });
 
   const db = mongoose.connection;
 
@@ -14,6 +18,8 @@ const connectToDatabase = async () => {
   db.once("open", () => {
     console.log("Connected successfully");
   });
-};
+}
 
-export default connectToDatabase;
+export async function disconnectFromDatabase() {
+  await connection.disconnect();
+}

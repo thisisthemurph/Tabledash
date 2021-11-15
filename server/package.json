@@ -4,16 +4,30 @@
   "description": "API for the Tabledash web application",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon src/server.js"
   },
   "author": "Michael Murphy",
   "license": "ISC",
   "dependencies": {
+    "core-js": "^3.19.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "mongoose": "^6.0.12",
-    "nodemon": "^2.0.15"
+    "regenerator-runtime": "^0.13.9"
   },
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.0",
+    "faker": "^5.5.3",
+    "http": "^0.0.1-security",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "supertest": "^6.1.6"
+  },
+  "jest": {
+    "verbose": true,
+    "testRegex": ".spec.js"
+  }
 }
