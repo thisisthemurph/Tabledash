@@ -3,7 +3,7 @@ import "regenerator-runtime/runtime";
 import supertest from "supertest";
 import http from "http";
 
-import makeFakeRestaurant from "./fixtures/fakeRestaurant.js";
+import RestaurantModel from "../src/database/models/retaurantSchema.js";
 import fakeRestaurantPost from "./fixtures/fakeRestaurantPost.js";
 import { disconnectFromDatabase } from "../src/database/db.js";
 import { createServer } from "../src/server.js";
@@ -14,8 +14,13 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  disconnectFromDatabase();
+  await disconnectFromDatabase();
 });
+
+// afterEach(async () => {
+//   await RestaurantModel.deleteMany();
+//   console.log("Deleted all documents");
+// });
 
 describe("Restaurant endpoints", () => {
   it("should POST a new restaurant", async () => {

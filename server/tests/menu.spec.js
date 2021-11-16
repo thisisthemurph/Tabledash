@@ -14,7 +14,7 @@ beforeAll(async () => {
 });
 
 afterAll(async () => {
-  disconnectFromDatabase();
+  await disconnectFromDatabase();
 });
 
 describe("Menu endpoints", () => {
@@ -44,22 +44,36 @@ describe("Menu endpoints", () => {
     expect(res.body.success).toBe(true);
     expect(res.body.menus).toBeInstanceOf(Array);
     expect(res.body.menus.length).toEqual(3);
+    expect(res.body.menus[0]).toBeInstanceOf(Object);
   });
 
   it("should GET a specific menu for a restaurant", async () => {
     let res = await fakeRestaurantPost(request);
     const restaurantId = res.body.created.restaurantId;
     res = await fakeMenuPost(request, restaurantId);
-    console.log({ body: res.body });
     const menuId = res.body.created.menuId;
 
-    const ep = `/api/restaurant/${restaurantId}/menu/${menuId}`;
-    console.log({ ep });
-    res = await request.get(ep);
+    res = await request.get(`/api/restaurant/${restaurantId}/menu/${menuId}`);
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toBeInstanceOf(Object);
     expect(res.body.success).toBe(true);
     expect(res.body.menu).toBeInstanceOf(Object);
+  });
+
+  it("should DELETE a menu from a restaurant", async () => {
+    let res = await fakeRestaurantPost(request);
+    const restaurantId = res.body.created.restaurantId;
+    res = await fakeMenuPost(request, restaurantId);
+    const menuId = res.body.created.menuId;
+
+    res = await request.delete(
+      `/api/restaurant/${restaurantId}/menu/${menuId}`
+    );
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeInstanceOf(Object);
+    expect(res.body.success).toBe(true);
+    expect(res.body.deleted).toBeInstanceOf(Object);
   });
 });
