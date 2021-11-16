@@ -21,6 +21,7 @@ export async function createServer() {
 
   app.all("/api/restaurant", restaurantController);
   app.get("/api/restaurant/:id", restaurantController);
+  app.put("/api/restaurant/:id", restaurantController);
   app.delete("/api/restaurant/:id", restaurantController);
 
   app.all("/api/restaurant/:restaurantId/menu", menuController);

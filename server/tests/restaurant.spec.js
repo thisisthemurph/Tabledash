@@ -18,7 +18,7 @@ afterAll(async () => {
 });
 
 // afterEach(async () => {
-//   await RestaurantModel.deleteMany();
+//   await RestaurantModel.deleteMany({});
 //   console.log("Deleted all documents");
 // });
 
@@ -63,5 +63,33 @@ describe("Restaurant endpoints", () => {
     expect(res.body).toBeInstanceOf(Object);
     expect(res.body.success).toBe(true);
     expect(res.body.deleted).toBeInstanceOf(Object);
+  });
+
+  it("should update (PUT) a restaurant", async () => {
+    let res = await fakeRestaurantPost(request);
+    const restaurantId = res.body.created.restaurantId;
+
+    res = await request.put(`/api/restaurant/${restaurantId}`).send({
+      name: "Murphy's Irish Bar",
+    });
+
+    expect(res.statusCode).toEqual(200);
+    expect(res.body).toBeInstanceOf(Object);
+    expect(res.body.success).toBe(true);
+    expect(res.body.updated).toBeInstanceOf(Object);
+    expect(res.body.updated.name).toEqual("Murphy's Irish Bar");
+  });
+
+  it("should fail updating on erroneous restaurantId", async () => {
+    const res = await request
+      .put("/api/restaurant/6192d8e380f08f178087e51c")
+      .send({
+        name: "Murphy's Irish Bar",
+      });
+
+    expect(res.statusCode).toEqual(404);
+    expect(res.body).toBeInstanceOf(Object);
+    expect(res.body.success).toBe(false);
+    expect(res.body.error).toEqual(expect.any(String));
   });
 });

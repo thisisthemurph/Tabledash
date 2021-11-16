@@ -15,6 +15,9 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
       case "DELETE":
         return deleteRestaurant(httpRequest);
 
+      case "PUT":
+        return updateRestaurant(httpRequest);
+
       default:
         return makeHttpError({
           statusCode: 405,
@@ -80,6 +83,25 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
     try {
       const deleted = await restaurantList.remove({ restaurantId: id });
       return makeHttpResponse({ data: { deleted } });
+    } catch (error) {
+      return makeHttpError({
+        errorMessage: error.message,
+        statusCode: error.status || 500,
+      });
+    }
+  }
+
+  async function updateRestaurant(httpRequest) {
+    const { id } = httpRequest.pathParams || {};
+    const restaurantInfo = httpRequest.body;
+
+    try {
+      const updated = await restaurantList.update({
+        restaurantId: id,
+        ...restaurantInfo,
+      });
+
+      return makeHttpResponse({ statusCode: 200, data: { updated } });
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,

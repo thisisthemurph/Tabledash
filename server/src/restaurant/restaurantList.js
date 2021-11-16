@@ -5,8 +5,9 @@ export default function makeRestaurantList({ RestaurantModel }) {
   return Object.freeze({
     add,
     findById,
-    remove,
     getItems,
+    remove,
+    update,
   });
 
   /**
@@ -67,6 +68,27 @@ export default function makeRestaurantList({ RestaurantModel }) {
     }
 
     return modelToRestaurant(deleted._doc);
+  }
+
+  /**
+   * Updates the given restaurant and returns the updated version
+   * @param {Object[]} restaurant
+   * @param {String} restaurant.restaurantId the ID of the restaurant to be updated
+   * @param {Object} restaurant.restaurantInfo the information to be updated
+   * @returns an object representing the updated restaurant
+   */
+  async function update({ restaurantId, ...restaurantInfo }) {
+    const updated = await RestaurantModel.findByIdAndUpdate(
+      restaurantId,
+      { ...restaurantInfo },
+      { returnDocument: "after" }
+    );
+
+    if (!updated) {
+      throw new RestaurantNotFoundError(restaurantId);
+    }
+
+    return modelToRestaurant(updated._doc);
   }
 
   /**
