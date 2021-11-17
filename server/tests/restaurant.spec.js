@@ -17,12 +17,12 @@ afterAll(async () => {
   await disconnectFromDatabase();
 });
 
-// afterEach(async () => {
-//   await RestaurantModel.deleteMany({});
-//   console.log("Deleted all documents");
-// });
-
 describe("Restaurant endpoints", () => {
+  afterEach(async () => {
+    await RestaurantModel.deleteMany({});
+    console.log("Deleted all documents");
+  });
+
   it("should POST a new restaurant", async () => {
     const res = await fakeRestaurantPost(request);
 
@@ -33,7 +33,8 @@ describe("Restaurant endpoints", () => {
   });
 
   it("should GET all restaurants", async () => {
-    const res = await request.get("/api/restaurant");
+    let res = await fakeRestaurantPost(request);
+    res = await request.get("/api/restaurant");
 
     expect(res.statusCode).toEqual(200);
     expect(res.body).toBeInstanceOf(Object);
