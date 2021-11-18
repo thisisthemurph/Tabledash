@@ -26,6 +26,7 @@ export async function createServer() {
 
   app.all("/api/restaurant/:restaurantId/menu", menuController);
   app.get("/api/restaurant/:restaurantId/menu/:menuId", menuController);
+  app.put("/api/restaurant/:restaurantId/menu/:menuId", menuController);
   app.delete("/api/restaurant/:restaurantId/menu/:menuId", menuController);
 
   // Error middleware

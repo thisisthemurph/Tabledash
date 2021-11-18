@@ -1,15 +1,23 @@
 import makeMenu from "../restaurantMenu/menu.js";
 import { InvalidPropertyError } from "../helpers/errors.js";
+import requiredParam from "../helpers/requiredParam.js";
 
-export default function makeRestaurant(restaurantInfo) {
+export default function makeRestaurant(
+  restaurantInfo = requiredParam("restaurantInfo")
+) {
   const validRestaurant = validate(restaurantInfo);
   const normalRestaurant = normalize(validRestaurant);
   normalRestaurant.menus = validateAndNormalizeMenus(normalRestaurant.menus);
   return Object.freeze(normalRestaurant);
 
-  function validate({ name, ...otherInfo } = {}) {
+  function validate({
+    name = requiredParam("name"),
+    users = requiredParam("users"),
+    location = requiredParam("location"),
+    ...otherInfo
+  } = {}) {
     validateName(name);
-    return { name, ...otherInfo };
+    return { name, users, location, ...otherInfo };
   }
 
   function validateName(name) {

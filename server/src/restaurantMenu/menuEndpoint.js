@@ -40,12 +40,12 @@ export default function makeMenuEndpointHandler({ menuList }) {
     }
 
     try {
-      const created = await menuList.add({ restaurantId, ...menuInfo });
+      const created = await menuList.add({ restaurantId, ...jsonResult });
       return makeHttpResponse({
         statusCode: 201,
         data: { created },
       });
-    } catch (e) {
+    } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
         statusCode: error.status || 500,
