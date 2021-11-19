@@ -1,11 +1,16 @@
 import { InvalidPropertyError } from "../helpers/errors.js";
+import requiredParam from "../helpers/requiredParam.js";
 
-export default function makeMenu(menuInfo) {
+export default function makeMenu(menuInfo = requiredParam("menuInfo")) {
   const validMenu = validate(menuInfo);
   const normalMenu = normalize(validMenu);
   return Object.freeze(normalMenu);
 
-  function validate({ name, defaultTaxRate, ...otherInfo } = {}) {
+  function validate({
+    name = requiredParam("menuName"),
+    defaultTaxRate = requiredParam("defaultTaxRate"),
+    ...otherInfo
+  } = {}) {
     validateName(name);
     validateDefaultTaxRate(defaultTaxRate);
     return { name, defaultTaxRate, ...otherInfo };

@@ -5,7 +5,13 @@ import {
 import makeMenu from "./menu.js";
 
 export default function makeMenuList({ RestaurantModel }) {
-  return Object.freeze({ add, findById, removeById, getItems });
+  return Object.freeze({
+    add,
+    findById,
+    removeById,
+    getItems,
+    updateById,
+  });
 
   /**
    * Adds a new menu to the restaurant with the given restaurantId
@@ -89,11 +95,36 @@ export default function makeMenuList({ RestaurantModel }) {
   }
 
   /**
+   * Updates a menu by the given restaurantId and menuId
+   * @param {Object[]} updateObject
+   * @param {String} restaurantId the ID of the restaurant that owns the menu
+   * @param {String} menuId the ID of the menu to be updated
+   * @param {Object} menuInfo object representing the data to be updated
+   * @returns an object representing the new menu
+   */
+  async function updateById({ restaurantId, menuId, ...menuInfo }) {
+    const restaurant = await RestaurantModel.findById(restaurantId);
+    if (!restaurant) {
+      throw new RestaurantNotFoundError(restaurantId);
+    }
+
+    const menu = restaurant.menus.id(menuId);
+    if (!menu) {
+      throw new MenuNotFoundError(restaurantId, menuId);
+    }
+
+    menu.set(makeMenu({ ...menu._doc, ...menuInfo }));
+    const updated = await restaurant.save();
+    const result = updated.menus.id(menuId)._doc;
+    return modelToMenu(result);
+  }
+
+  /**
    * Converts a model to a Menu object
    * @param {Object[]} menu the menu model to be converted
    * @returns an Object representing a Restaurant
    */
-  function modelToMenu({ _id: menuId, ...model }) {
-    return makeMenu({ menuId, ...model });
+  function modelToMenu({ _id: menuId, name, defaultTaxRate, ...model }) {
+    return makeMenu({ menuId, name, defaultTaxRate, ...model });
   }
 }

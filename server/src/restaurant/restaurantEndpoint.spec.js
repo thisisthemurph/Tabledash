@@ -3,38 +3,19 @@ import "regenerator-runtime/runtime";
 import faker from "faker";
 
 import handle from ".";
-import connectToDatabase from "../database/db.js";
-import makeFakeRestaurant from "../../tests/fixtures/fakeRestaurant.js";
+import connectToDatabase, { disconnectFromDatabase } from "../database/db.js";
+import { postFakeRestaurant } from "../../tests/fakers/fakeRestaurant.js";
 import RestaurntMoel from "../database/models/retaurantSchema.js";
-
-function isJSONString(data) {
-  try {
-    const json = JSON.parse(data);
-    const objType = Object.prototype.toString.call(json);
-    if (!(objType.endsWith("Object]") || objType.endsWith("Array]"))) {
-      return false;
-    }
-  } catch (e) {
-    return false;
-  }
-
-  return true;
-}
-
-function isErrorObject({ success, error }) {
-  return success === false && typeof error === "string";
-}
-
-beforeAll(async () => await connectToDatabase());
-afterEach(async () => await RestaurntMoel.deleteMany({}));
+import isJSONString from "../../tests/fixtures/isJSONString.js";
+import isErrorObject from "../../tests/fixtures/isErrorObject.js";
 
 describe("Restaurant Endpoint", () => {
+  beforeAll(async () => await connectToDatabase());
+  afterAll(async () => await disconnectFromDatabase());
+  afterEach(async () => await RestaurntMoel.deleteMany({}));
+
   it("will create a new restaurant", async () => {
-    const dummy = makeFakeRestaurant();
-    const result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummy),
-    });
+    const { dummy, result } = await postFakeRestaurant(handle);
 
     expect(result.statusCode).toEqual(201);
     expect(result.headers).toEqual({ "Content-Type": "application/json" });
@@ -79,7 +60,7 @@ describe("Restaurant Endpoint", () => {
   });
 
   it("will NOT create a restaurant without a user", async () => {
-    const dummyRestaurant = {
+    const dummy = {
       name: faker.company.companyName(),
       location: {
         country: faker.address.country(),
@@ -89,17 +70,14 @@ describe("Restaurant Endpoint", () => {
       styles: {},
     };
 
-    const result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummyRestaurant),
-    });
+    const { result } = await postFakeRestaurant(handle, dummy);
 
     expect(result.statusCode).toEqual(400);
     expect(isErrorObject(JSON.parse(result.data))).toBe(true);
   });
 
   it("will NOT create a restaurant without a location", async () => {
-    const dummyRestaurant = {
+    const dummy = {
       name: faker.company.companyName(),
       location: {
         country: faker.address.country(),
@@ -109,39 +87,25 @@ describe("Restaurant Endpoint", () => {
       styles: {},
     };
 
-    const result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummyRestaurant),
-    });
+    const { result } = await postFakeRestaurant(handle, dummy);
 
     expect(result.statusCode).toEqual(400);
     expect(isErrorObject(JSON.parse(result.data))).toBe(true);
   });
 
   it("will retrieve all restaurants", async () => {
-    // Create the test restaurants
-
-    const r1 = handle({
-      method: "POST",
-      body: JSON.stringify(makeFakeRestaurant()),
-    });
-    const r2 = handle({
-      method: "POST",
-      body: JSON.stringify(makeFakeRestaurant()),
-    });
-    const r3 = handle({
-      method: "POST",
-      body: JSON.stringify(makeFakeRestaurant()),
-    });
-    await Promise.all([r1, r2, r3]);
+    const r1 = await postFakeRestaurant(handle);
+    const r2 = await postFakeRestaurant(handle);
+    const r3 = await postFakeRestaurant(handle);
+    // await Promise.all([r1, r2, r3]);
 
     // Now the testing
 
     const result = await handle({ method: "GET" });
-
     expect(result.statusCode).toEqual(200);
 
     const { success, restaurants } = JSON.parse(result.data);
+
     expect(success).toBe(true);
     expect(restaurants).toBeInstanceOf(Array);
     expect(restaurants).toHaveLength(3);
@@ -151,14 +115,10 @@ describe("Restaurant Endpoint", () => {
   });
 
   it("will retrieve a restaurant by its ID", async () => {
-    const dummy = makeFakeRestaurant();
-    let result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummy),
-    });
+    const { result: postRes } = await postFakeRestaurant(handle);
+    const { created } = JSON.parse(postRes.data);
 
-    const { created } = JSON.parse(result.data);
-    result = await handle({
+    const result = await handle({
       method: "GET",
       pathParams: { id: created.restaurantId },
     });
@@ -184,15 +144,10 @@ describe("Restaurant Endpoint", () => {
   });
 
   it("will delete a restaurant by its ID", async () => {
-    const dummy = makeFakeRestaurant();
-    let result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummy),
-    });
+    const { result: postRes } = await postFakeRestaurant(handle);
+    const { created } = JSON.parse(postRes.data);
 
-    const { created } = JSON.parse(result.data);
-
-    result = await handle({
+    const result = await handle({
       method: "DELETE",
       pathParams: { id: created.restaurantId },
     });
@@ -219,16 +174,12 @@ describe("Restaurant Endpoint", () => {
   });
 
   it("will update a restaurant", async () => {
-    const dummy = makeFakeRestaurant();
-    let result = await handle({
-      method: "POST",
-      body: JSON.stringify(dummy),
-    });
+    const { result: postRes } = await postFakeRestaurant(handle);
 
-    const { created } = JSON.parse(result.data);
+    const { created } = JSON.parse(postRes.data);
 
     const changes = { name: "Murphy's Irish Bar" };
-    result = await handle({
+    const result = await handle({
       method: "PUT",
       pathParams: { id: created.restaurantId },
       body: JSON.stringify(changes),

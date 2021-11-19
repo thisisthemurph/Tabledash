@@ -1,8 +1,9 @@
 import faker from "faker";
+import makeMenu from "../../src/restaurantMenu/menu.js";
 import makeRestaurant from "../../src/restaurant/restaurant.js";
 
-export default function makeFakeRestaurant(spec = {}) {
-  return makeRestaurant({
+export function makeFakeRestaurant(spec = {}) {
+  return {
     name: faker.company.companyName(),
     location: {
       country: faker.address.country(),
@@ -19,5 +20,14 @@ export default function makeFakeRestaurant(spec = {}) {
     ],
     styles: {},
     ...spec,
+  };
+}
+
+export async function postFakeRestaurant(handle, dummy = makeFakeRestaurant()) {
+  const result = await handle({
+    method: "POST",
+    body: JSON.stringify(dummy),
   });
+
+  return { dummy, result };
 }

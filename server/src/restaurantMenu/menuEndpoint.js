@@ -14,6 +14,9 @@ export default function makeMenuEndpointHandler({ menuList }) {
       case "DELETE":
         return deleteMenu(httpRequest);
 
+      case "PUT":
+        return updateMenu(httpRequest);
+
       default:
         return makeHttpError({
           statusCode: 405,
@@ -78,6 +81,39 @@ export default function makeMenuEndpointHandler({ menuList }) {
     try {
       const deleted = await menuList.removeById({ restaurantId, menuId });
       return makeHttpResponse({ data: { deleted } });
+    } catch (error) {
+      return makeHttpError({
+        errorMessage: error.message,
+        statusCode: error.status || 500,
+      });
+    }
+  }
+
+  async function updateMenu(httpRequest) {
+    const { restaurantId, menuId } = httpRequest.pathParams;
+    let menuInfo = httpRequest.body;
+
+    if (!menuInfo) {
+      return makeHttpError({
+        status: 400,
+        errorMessage: `Bad request. No POST body provided.`,
+      });
+    }
+
+    // Decode JSON or send an error if not JSON
+    const jsonResult = jsonOrHttpError(menuInfo);
+    if (jsonResult.errorMessage) {
+      return jsonResult;
+    }
+
+    try {
+      const updated = await menuList.updateById({
+        restaurantId,
+        menuId,
+        ...jsonResult,
+      });
+
+      return makeHttpResponse({ data: { updated } });
     } catch (error) {
       return makeHttpError({
         errorMessage: error.message,
