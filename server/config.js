@@ -14,3 +14,5 @@ export const DB_CLUSTER = process.env.DB_CLUSTER;
 export const DB_NAME = process.env.DB_NAME;
 
 export const DB_CONNECTION_STRING = `mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_CLUSTER}.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
+
+export const JWT_SECRET = process.env.JWT_SECRET;

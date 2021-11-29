@@ -8,10 +8,6 @@ export class RestaurantNotFoundError extends Error {
       Error.captureStackTrace(this, RestaurantNotFoundError);
     }
   }
-
-  statusCode() {
-    return this.status;
-  }
 }
 
 export class MenuNotFoundError extends Error {
@@ -25,9 +21,35 @@ export class MenuNotFoundError extends Error {
       Error.captureStackTrace(this, MenuNotFoundError);
     }
   }
+}
 
-  statusCode() {
-    return this.status;
+export class UserNotFoundError extends Error {
+  constructor({ userId, username, email }) {
+    console.log({ userId, username, email });
+    const key = userId ? "ID" : username ? "username" : "email";
+    const value = userId ? userId : username ? username : email;
+
+    super(`User with ${key} of ${value} could not be found.`);
+    Error.captureStackTrace(this, this.constructor);
+    this.status = 404;
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserNotFoundError);
+    }
+  }
+}
+
+export class UserExistsError extends Error {
+  constructor({ username, email }) {
+    const key = username ? "username" : "email";
+    const value = username ? username : email;
+    super(`User with ${key} of ${value} already exists.`);
+    Error.captureStackTrace(this, this.constructor);
+    this.status = 400;
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UserExistsError);
+    }
   }
 }
 
@@ -40,10 +62,6 @@ export class InvalidPropertyError extends Error {
       Error.captureStackTrace(this, InvalidPropertyError);
     }
   }
-
-  statusCode() {
-    return this.status;
-  }
 }
 
 export class UniqueConstraintError extends Error {
@@ -55,10 +73,6 @@ export class UniqueConstraintError extends Error {
       Error.captureStackTrace(this, UniqueConstraintError);
     }
   }
-
-  statusCode() {
-    return this.status;
-  }
 }
 
 export class RequiredParameterError extends Error {
@@ -69,9 +83,5 @@ export class RequiredParameterError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, RequiredParameterError);
     }
-  }
-
-  statusCode() {
-    return this.status;
   }
 }

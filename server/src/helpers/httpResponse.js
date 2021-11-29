@@ -5,7 +5,11 @@
  * @param {Object} response.data the data object to be sent with the response, defaults to null
  * @returns a response object
  */
-export default function makeHttpResponse({ statusCode = 200, data = null }) {
+export default function makeHttpResponse({
+  statusCode = 200,
+  data = null,
+  headers = null,
+}) {
   const response = {
     headers: {
       "Content-Type": "application/json",
@@ -16,6 +20,13 @@ export default function makeHttpResponse({ statusCode = 200, data = null }) {
   if (data) {
     const success = statusCode >= 200 && statusCode < 300 ? true : false;
     response["data"] = JSON.stringify({ success, ...data });
+  }
+
+  if (headers) {
+    response["headers"] = {
+      ...response.headers,
+      ...headers,
+    };
   }
 
   return response;
