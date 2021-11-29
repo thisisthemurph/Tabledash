@@ -16,11 +16,29 @@ import {
 } from "./middleware/errorHandlers.js";
 import { authenticate, requireAdmin } from "./middleware/auth.js";
 
+function makeController(handle) {
+  return (req, res) => {
+    const httpRequest = adaptRequest(req);
+    handle(httpRequest)
+      .then(({ headers, statusCode, data }) =>
+        res.set(headers).status(statusCode).send(data)
+      )
+      .catch((e) => res.status(500).end());
+  };
+}
+
 export async function createServer() {
   await connectToDatabase();
   const app = express();
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Make the controllers
+
+  const restaurantController = makeController(handleRestaurantRequest);
+  const menuController = makeController(handleRestaurantMenuRequest);
+  const userController = makeController(handleUserRequest);
+  const authController = makeController(handleAuthRequest);
 
   // Endpoints
 
@@ -75,44 +93,6 @@ async function startServer() {
   app.listen({ port: PORT }, async () => {
     console.log(`Server is listening on port ${PORT}`);
   });
-}
-
-// Controllers
-
-function authController(req, res) {
-  const httpRequest = adaptRequest(req);
-  handleAuthRequest(httpRequest)
-    .then(({ headers, statusCode, data }) =>
-      res.set(headers).status(statusCode).send(data)
-    )
-    .catch((e) => res.status(500).end());
-}
-
-function restaurantController(req, res) {
-  const httpRequest = adaptRequest(req);
-  handleRestaurantRequest(httpRequest)
-    .then(({ headers, statusCode, data }) =>
-      res.set(headers).status(statusCode).send(data)
-    )
-    .catch((e) => res.status(500).end());
-}
-
-function menuController(req, res) {
-  const httpRequest = adaptRequest(req);
-  handleRestaurantMenuRequest(httpRequest)
-    .then(({ headers, statusCode, data }) =>
-      res.set(headers).status(statusCode).send(data)
-    )
-    .catch((e) => res.status(500).end());
-}
-
-function userController(req, res) {
-  const httpRequest = adaptRequest(req);
-  handleUserRequest(httpRequest)
-    .then(({ headers, statusCode, data }) =>
-      res.set(headers).status(statusCode).send(data)
-    )
-    .catch((e) => res.status(500).end());
 }
 
 if (ENVIRONMENT === "dev") {
