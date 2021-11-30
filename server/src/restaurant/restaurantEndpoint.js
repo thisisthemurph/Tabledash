@@ -27,7 +27,10 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
   };
 
   async function postRestaurant(httpRequest) {
-    let restaurantInfo = httpRequest.body;
+    const restaurantInfo = {
+      ...httpRequest.body,
+      users: [httpRequest.user.userId],
+    };
 
     if (!restaurantInfo) {
       return makeHttpError({
@@ -36,8 +39,8 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
       });
     }
 
+    // Error if the data is not JSON of Object
     const jsonResult = jsonOrHttpError(restaurantInfo);
-    // Error if the data was not JSON
     if (jsonResult.errorMessage) {
       return jsonResult;
     }

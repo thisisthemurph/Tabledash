@@ -34,7 +34,10 @@ export default function makeRestaurantList({ RestaurantModel }) {
    * @returns an object representing a Restaurant
    */
   async function findById({ restaurantId }) {
-    const found = await RestaurantModel.findById(restaurantId).lean();
+    const found = await RestaurantModel.findById(restaurantId)
+      .populate("users")
+      .lean();
+
     if (!found) {
       throw new RestaurantNotFoundError(restaurantId);
     }

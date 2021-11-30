@@ -42,8 +42,8 @@ export async function createServer() {
 
   // Endpoints
 
-  app.all("/api/restaurant", restaurantController);
   app.get("/api/restaurant/:id", restaurantController);
+  app.post("/api/restaurant", authenticate, requireAdmin, restaurantController);
   app.put(
     "/api/restaurant/:id",
     authenticate,
@@ -56,6 +56,7 @@ export async function createServer() {
     requireAdmin,
     restaurantController
   );
+  app.all("/api/restaurant", restaurantController);
 
   app.all("/api/restaurant/:restaurantId/menu", menuController);
   app.get("/api/restaurant/:restaurantId/menu/:menuId", menuController);
