@@ -1,0 +1,29 @@
+html {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+  background: rgb(235, 235, 235);
+  color: rgb(42, 43, 44);
+  min-height: 100vh;
+}
+
+.header {
+  background: #fede4f;
+}
+
+.section {
+  padding: 1rem;
+}
+
+/**
+ * NAVIGATION
+ */
+
+nav a {
+  padding: 1em;
+}
+
+nav a:first-child {
+  padding-left: 0;
+}
