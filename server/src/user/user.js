@@ -1,8 +1,10 @@
 import requiredParam from "../helpers/requiredParam.js";
-import { InvalidPropertyError } from "../helpers/errors.js";
+import {
+  InvalidPropertyError,
+  RequiredParameterError,
+} from "../helpers/errors.js";
 
 export default function makeUser(userInfo = requiredParam("userInfo")) {
-  console.log({ userInfo });
   const validUser = validate(userInfo);
   const normalUser = normalize(validUser);
   return Object.freeze(normalUser);
@@ -24,7 +26,7 @@ export default function makeUser(userInfo = requiredParam("userInfo")) {
     // Validate the length of the username is correct
     if (username.length < 3) {
       throw new InvalidPropertyError(
-        "a username must be 3 characters or more in length."
+        "A username must be 3 characters or more in length."
       );
     }
 
@@ -39,7 +41,7 @@ export default function makeUser(userInfo = requiredParam("userInfo")) {
     username.split("").forEach((letter) => {
       if (!sanctionedCharacters.includes(letter.toLowerCase())) {
         throw new InvalidPropertyError(
-          "A username must include only letters a - z, dashes, underscores and dots (periods)."
+          "A username must include only letters a - z, numbers, dashes, underscores and dots (periods)."
         );
       }
     });
@@ -47,9 +49,7 @@ export default function makeUser(userInfo = requiredParam("userInfo")) {
 
   function validateEmail(isAdmin, email) {
     if (isAdmin && !email) {
-      throw new InvalidPropertyError(
-        "An admin user must have an email address."
-      );
+      throw new RequiredParameterError("email");
     }
   }
 
@@ -57,7 +57,7 @@ export default function makeUser(userInfo = requiredParam("userInfo")) {
     username = normalizeUsername(username);
     isAdmin = normalizeIsAdmin(isAdmin);
 
-    // The password is not inclued
+    // The password is not returned with the user - security
     return { username, isAdmin, ...otherInfo };
   }
 

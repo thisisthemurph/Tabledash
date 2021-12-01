@@ -73,7 +73,7 @@ export async function createServer() {
     menuController
   );
 
-  app.all("/api/user", authenticate, userController);
+  app.all("/api/user", userController);
   app.get("/api/user/:userId", authenticate, userController);
   app.get("/api/user/username/:username", authenticate, userController);
   app.delete("/api/user/:userId", authenticate, requireAdmin, userController);

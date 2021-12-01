@@ -58,8 +58,8 @@ export default function makeUserEndpointHandler({ userList }) {
     }
 
     try {
-      const user = makeUser(jsonResult);
-      const created = await userList.add(user);
+      // const user = makeUser(jsonResult);
+      const created = await userList.add(jsonResult);
 
       return makeHttpResponse({
         statusCode: 201,

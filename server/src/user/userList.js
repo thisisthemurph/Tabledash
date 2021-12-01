@@ -8,8 +8,8 @@ export default function makeUserList({ UserModel }) {
     find,
   });
 
-  async function add({ ...userInfo }) {
-    const { username, email, password, ...user } = makeUser(userInfo);
+  async function add({ password, ...userInfo }) {
+    const { username, email, ...user } = makeUser(userInfo);
 
     // Verify if a user with username already exists
 
@@ -31,6 +31,7 @@ export default function makeUserList({ UserModel }) {
 
     let newUser = new UserModel({
       username,
+      email,
       password: hashedPassword,
       ...user,
     });
