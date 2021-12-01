@@ -16,6 +16,14 @@ html {
   padding: 1rem;
 }
 
+.error {
+  color: white;
+  background: salmon;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
 /**
  * NAVIGATION
  */
@@ -26,4 +34,38 @@ nav a {
 
 nav a:first-child {
   padding-left: 0;
+}
+
+/**
+ * FORMS
+ */
+
+.form__section {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0;
+}
+
+.form__section input[type="text"],
+.form__section input[type="email"],
+.form__section input[type="password"] {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  border: solid 1px gray;
+}
+
+.form__section input[type="submit"],
+.form__section button {
+  color: white;
+  background: black;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form__section input[type="submit"]:disabled,
+.form__section button:disabled {
+  background: lightgray;
+  cursor: not-allowed;
 }
