@@ -1,6 +1,6 @@
 const API_URL = "http://localhost:3001/api";
 
-const client = (endpoint, { body, ...customConfig }) => {
+const client = async (endpoint, { body, ...customConfig }) => {
   const config = {
     method: body ? "POST" : "GET",
     headers: {

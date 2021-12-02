@@ -1,14 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-import client from "../api/api-client";
+import { login } from "../api/auth";
 
 const defaultFormValues = {
-  name: "",
   username: "",
-  email: "",
   password: "",
-  isAdmin: true,
 };
 
 const Register = () => {
@@ -19,13 +16,7 @@ const Register = () => {
   const [formValues, setFormValues] = useState(defaultFormValues);
 
   const updateForm = (key, event) => {
-    if (key === "name") {
-      const username = event.target.value.toLowerCase().replace(" ", ".");
-      setFormValues({ ...formValues, [key]: event.target.value, username });
-    } else {
-      setFormValues({ ...formValues, [key]: event.target.value });
-    }
-
+    setFormValues({ ...formValues, [key]: event.target.value });
     validate();
   };
 
@@ -33,7 +24,7 @@ const Register = () => {
     event.preventDefault();
 
     try {
-      await client("user", { body: formValues });
+      const response = await login({ ...formValues });
       navigate("/");
     } catch (err) {
       setError(err.error);
@@ -47,19 +38,9 @@ const Register = () => {
   };
 
   const validate = () => {
-    const { name, username, email, password } = formValues;
-
-    if (!name || name.length < 3) {
-      setCanSubmit(false);
-      return;
-    }
+    const { username, password } = formValues;
 
     if (!username || username.length < 3) {
-      setCanSubmit(false);
-      return;
-    }
-
-    if (!email) {
       setCanSubmit(false);
       return;
     }
@@ -74,7 +55,7 @@ const Register = () => {
 
   return (
     <div className="section">
-      <h2>Register</h2>
+      <h2>Login</h2>
       <form onSubmit={handleSubmit} className="form">
         {error ? (
           <div className="error">
@@ -83,16 +64,6 @@ const Register = () => {
         ) : null}
 
         <div className="form__section">
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Name"
-            value={formValues.name}
-            onChange={(e) => updateForm("name", e)}
-          />
-        </div>
-        <div className="form__section">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -100,16 +71,6 @@ const Register = () => {
             placeholder="Username"
             value={formValues.username}
             onChange={(e) => updateForm("username", e)}
-          />
-        </div>
-        <div className="form__section">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="you@domain.com"
-            value={formValues.email}
-            onChange={(e) => updateForm("email", e)}
           />
         </div>
         <div className="form__section">
@@ -122,7 +83,7 @@ const Register = () => {
           />
         </div>
         <div className="form__section">
-          <input type="submit" value="Register" disabled={!canSubmit} />
+          <input type="submit" value="Login" disabled={!canSubmit} />
         </div>
       </form>
     </div>
