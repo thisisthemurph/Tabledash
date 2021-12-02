@@ -8,7 +8,7 @@ const defaultFormValues = {
   password: "",
 };
 
-const Register = () => {
+const Login = () => {
   const navigate = useNavigate();
 
   const [error, setError] = useState(null);
@@ -90,4 +90,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
