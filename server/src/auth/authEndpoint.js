@@ -10,14 +10,20 @@ export default function makeAuthEndpointHandler({ authList }) {
     switch (httpRequest.method) {
       case "POST":
         const { action } = httpRequest.pathParams;
-        if (action !== "login") {
-          return makeHttpError({
-            statusCode: 404,
-            errorMessage: "Unknown authentication route",
-          });
-        }
 
-        return login(httpRequest);
+        switch (action) {
+          case "login":
+            return login(httpRequest);
+
+          case "verify":
+            return verifyToken(httpRequest);
+
+          default:
+            return makeHttpError({
+              statusCode: 404,
+              errorMessage: "Unknown authentication route",
+            });
+        }
 
       default:
         return makeHttpError({
@@ -26,6 +32,20 @@ export default function makeAuthEndpointHandler({ authList }) {
         });
     }
   };
+
+  async function verifyToken(httpRequest) {
+    const { token: userToken } = httpRequest.body;
+
+    try {
+      const { user, token } = await authList.verifyToken({ token: userToken });
+      return makeHttpResponse({ data: { user, token } });
+    } catch (error) {
+      return makeHttpError({
+        statusCode: error.status || 500,
+        errorMessage: error.message,
+      });
+    }
+  }
 
   async function login(httpRequest) {
     const { username, password } = makeAuth(httpRequest.body);

@@ -85,3 +85,14 @@ export class RequiredParameterError extends Error {
     }
   }
 }
+
+export class UnauthorizedAccessError extends Error {
+  constructor(additionalMessage) {
+    super(`Bad authentication. ${additionalMessage || ""}`);
+    this.status = 401;
+
+    if (Error.captureStackTrace) {
+      Error.captureStackTrace(this, UnauthorizedAccess);
+    }
+  }
+}

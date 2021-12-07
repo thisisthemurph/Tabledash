@@ -1,12 +1,20 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-import { InvalidPropertyError, UserNotFoundError } from "../helpers/errors.js";
+import { JWT_SECRET } from "../../config.js";
+
+import {
+  InvalidPropertyError,
+  UnauthorizedAccessError,
+  UserNotFoundError,
+} from "../helpers/errors.js";
 import makeUser from "../user/user.js";
 import makeAuth from "./auth.js";
 
 export default function makeAuthList({ UserModel }) {
   return Object.freeze({
     login,
+    verifyToken,
   });
 
   async function login({ ...authInfo }) {
@@ -31,7 +39,33 @@ export default function makeAuthList({ UserModel }) {
     return modelToAuthResponse({ success: true, ...user });
   }
 
+  async function verifyToken({ token }) {
+    if (!token) {
+      throw new UnauthorizedAccessError("Auth token not provided.");
+    }
+
+    const decodedToken = jwt.verify(token, JWT_SECRET);
+
+    if (!decodedToken) {
+      throw new UnauthorizedAccessError("Bad token.");
+    }
+
+    const { user: decodedUser } = decodedToken;
+    let user = await UserModel.findById(decodedUser.userId).lean();
+
+    if (!user) {
+      throw new UnauthorizedAccessError("No known user associated with token.");
+    }
+
+    user = modelToUser(user);
+    return { user, token };
+  }
+
   function modelToAuthResponse({ success, _id: userId, ...user }) {
     return { success, user: makeUser({ userId, ...user }) };
+  }
+
+  function modelToUser({ _id: userId, ...model }) {
+    return makeUser({ userId, ...model });
   }
 }
