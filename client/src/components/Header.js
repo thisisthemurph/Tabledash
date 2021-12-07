@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 
-import { logout } from "../api/auth";
+import { logout } from "../helper/auth";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -16,6 +16,7 @@ const Header = () => {
       <h1>Tabledash</h1>
       <nav>
         <Link to="/">Home</Link>
+        <Link to="/dashboard">Dashboard</Link>
         <Link to="/login">Login</Link>
         <Link to="/register">Register</Link>
         <Link to="/logout" onClick={handleLogout}>

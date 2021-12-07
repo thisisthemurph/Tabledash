@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import { login } from "../api/auth";
+import useToken from "../hooks/useToken";
 
 const defaultFormValues = {
   username: "",
@@ -10,6 +11,7 @@ const defaultFormValues = {
 
 const Login = () => {
   const navigate = useNavigate();
+  const { setToken } = useToken();
 
   const [error, setError] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
@@ -25,7 +27,11 @@ const Login = () => {
 
     try {
       const response = await login({ ...formValues });
-      navigate("/");
+      if (response.success) {
+        const { token } = response;
+        setToken(token);
+        navigate("/dashboard");
+      }
     } catch (err) {
       setError(err.error);
     }
