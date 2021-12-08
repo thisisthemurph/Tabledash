@@ -1,6 +1,5 @@
 import { logout } from "../../helper/auth";
-
-const API_URL = "http://localhost:3001/api";
+import { API_BASE_URL } from "../../config";
 
 /**
  * Simplifies making a request to the API
@@ -18,7 +17,7 @@ const makeRequest = async (endpoint, { ...body }) => {
     body: JSON.stringify(body),
   };
 
-  return await fetch(new URL(`${API_URL}/${endpoint}`).toString(), config);
+  return await fetch(new URL(`${API_BASE_URL}/${endpoint}`).toString(), config);
 };
 
 /**
@@ -51,7 +50,6 @@ export const verifyToken = async ({ token }) => {
   const response = await makeRequest("auth/verify", { token });
   if (response && response.ok) {
     const { success } = await response.json();
-    console.log({ success });
     return success;
   }
 

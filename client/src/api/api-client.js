@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3001/api";
+import { API_BASE_URL } from "../config";
 
 const client = async (endpoint, { body, ...customConfig }) => {
   const config = {
@@ -15,7 +15,7 @@ const client = async (endpoint, { body, ...customConfig }) => {
   }
 
   return window
-    .fetch(new URL(`${API_URL}/${endpoint}`).toString(), config)
+    .fetch(new URL(`${API_BASE_URL}/${endpoint}`).toString(), config)
     .then(async (resp) => {
       if (resp.status === 204) return { success: true };
 
