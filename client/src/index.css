@@ -29,12 +29,58 @@ html {
  * NAVIGATION
  */
 
-nav a {
-  padding: 1em;
+nav {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
-nav a:first-child {
-  padding-left: 0;
+.nav__section {
+  display: flex;
+  flex-direction: column;
+}
+
+.nav__section:last-of-type {
+  margin-top: 2rem;
+}
+
+nav a {
+  color: black;
+  padding: 1rem;
+  text-decoration: none;
+}
+
+nav a:hover {
+  background: #f6d025;
+}
+
+nav a:visited {
+  color: black;
+}
+
+nav a.button {
+  margin: auto;
+  width: 30%;
+  padding: 0.75rem 0.5rem;
+  border-radius: 50px;
+  margin-bottom: 15px;
+}
+
+nav a.button-primary {
+  box-shadow: black 0px 6px;
+  background: teal;
+  color: rgb(223, 228, 236);
+}
+
+nav a.button-primary:hover {
+  transform: translateY(4px);
+  box-shadow: black 0px 2px;
+}
+
+nav a.button-secondary {
+  color: teal;
+  background: transparent;
+  border: teal solid 1px;
 }
 
 /**

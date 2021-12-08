@@ -12,16 +12,28 @@ const Header = () => {
   };
 
   return (
-    <header className="header section">
-      <h1>Tabledash</h1>
+    <header className="header">
+      <h1 className="section">Tabledash</h1>
       <nav>
-        <Link to="/">Home</Link>
-        <Link to="/dashboard">Dashboard</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
-        <Link to="/logout" onClick={handleLogout}>
-          Logout
-        </Link>
+        <div className="nav__section">
+          <Link to="/">Home</Link>
+          <Link to="/dashboard">Dashboard</Link>
+        </div>
+        <div className="nav__section">
+          <Link className="button button-secondary" to="/login">
+            Login
+          </Link>
+          <Link className="button button-primary" to="/register">
+            Register
+          </Link>
+          <Link
+            className="button button-secondary"
+            to="/logout"
+            onClick={handleLogout}
+          >
+            Logout
+          </Link>
+        </div>
       </nav>
     </header>
   );
