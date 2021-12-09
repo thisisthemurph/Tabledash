@@ -7,6 +7,10 @@ const User = new mongoose.Schema(
     username: { type: String, required: true },
     password: { type: String, required: true, select: false },
     isAdmin: { type: Boolean, required: true, default: false },
+    restaurant: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Restaurant",
+    },
   },
   { timestamps: true },
   { collection: "user" }

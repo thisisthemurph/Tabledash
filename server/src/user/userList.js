@@ -6,6 +6,7 @@ export default function makeUserList({ UserModel }) {
   return Object.freeze({
     add,
     find,
+    update,
   });
 
   async function add({ password, ...userInfo }) {
@@ -55,6 +56,20 @@ export default function makeUserList({ UserModel }) {
     }
 
     return modelToUser(user._doc);
+  }
+
+  async function update({ userId, ...userInfo }) {
+    const updated = await UserModel.findByIdAndUpdate(
+      userId,
+      { ...userInfo },
+      { returnDocument: "after" }
+    );
+
+    if (!updated) {
+      throw new UserNotFoundError({ userId });
+    }
+
+    return modelToUser(updated._doc);
   }
 
   function modelToUser({ _id: userId, ...model }) {

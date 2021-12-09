@@ -12,6 +12,9 @@ export default function makeUserEndpointHandler({ userList }) {
       case "POST":
         return postUser(httpRequest);
 
+      case "PUT":
+        return updateUser(httpRequest);
+
       case "DELETE":
         return deleteUser(httpRequest);
 
@@ -67,6 +70,25 @@ export default function makeUserEndpointHandler({ userList }) {
       });
     } catch (error) {
       return makeHttpError({
+        statusCode: error.status || 500,
+        errorMessage: error.message,
+      });
+    }
+  }
+
+  async function updateUser(httpRequest) {
+    const userInfo = httpRequest.body;
+    const { userId } = httpRequest.pathParams || {};
+
+    try {
+      const updated = await userList.update({
+        userId,
+        ...userInfo,
+      });
+
+      return makeHttpResponse({ statusCode: 200, data: { updated } });
+    } catch (error) {
+      makeHttpError({
         statusCode: error.status || 500,
         errorMessage: error.message,
       });
