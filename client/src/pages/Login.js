@@ -1,8 +1,6 @@
-import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useContext, useState } from "react";
 
-import { login } from "../api/auth";
-import useToken from "../hooks/useToken";
+import { UserContext } from "../context/UserContext";
 
 const defaultFormValues = {
   username: "",
@@ -10,8 +8,7 @@ const defaultFormValues = {
 };
 
 const Login = () => {
-  const navigate = useNavigate();
-  const { setToken } = useToken();
+  const { login } = useContext(UserContext);
 
   const [error, setError] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
@@ -26,14 +23,9 @@ const Login = () => {
     event.preventDefault();
 
     try {
-      const response = await login({ ...formValues });
-      if (response.success) {
-        const { token } = response;
-        setToken(token);
-        navigate("/dashboard");
-      }
-    } catch (err) {
-      setError(err.error);
+      login({ ...formValues });
+    } catch (error) {
+      setError(error.error);
     }
   };
 

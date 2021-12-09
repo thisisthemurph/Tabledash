@@ -8,9 +8,14 @@ export default function useToken() {
 
   const [token, setToken] = useState(getToken());
 
+  /**
+   * Determine if the current token is a valid token
+   * @returns an Object of {user, verified}
+   */
   const tokenIsValid = async () => {
     if (!token) return false;
-    return await verifyToken({ token });
+    const { user, verified } = await verifyToken({ token });
+    return { user, verified };
   };
 
   const saveToken = (token) => {

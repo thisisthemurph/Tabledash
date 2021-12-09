@@ -1,4 +1,3 @@
-import { logout } from "../../helper/auth";
 import { API_BASE_URL } from "../../config";
 
 /**
@@ -35,7 +34,7 @@ export const login = async ({ username, password }) => {
     const { success, user } = await response.json();
     return { success, user, token };
   } else {
-    logout();
+    localStorage.removeItem("token");
     return await response.json();
   }
 };
@@ -47,11 +46,11 @@ export const login = async ({ username, password }) => {
  * @returns true if verified, otherwise false
  */
 export const verifyToken = async ({ token }) => {
-  const response = await makeRequest("auth/verify", { token });
-  if (response && response.ok) {
-    const { success } = await response.json();
-    return success;
-  }
+  if (!token) return { verified: false, user: null };
 
-  return false;
+  const response = await makeRequest("auth/verify", { token });
+  if (!response || !response.ok) return { verified: false, user: null };
+
+  const { success, user } = await response.json();
+  return { verified: success, user };
 };
