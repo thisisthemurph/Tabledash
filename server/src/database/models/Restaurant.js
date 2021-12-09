@@ -17,6 +17,7 @@ const Restaurant = new mongoose.Schema(
     ],
     menus: [Menu],
   },
+  { timestaps: true },
   { collection: "restaurant" }
 );
 
