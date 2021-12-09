@@ -1,4 +1,4 @@
-import RestaurantModel from "../database/models/RetaurantSchema.js";
+import RestaurantModel from "../database/models/Restaurant.js";
 import makeMenuList from "./menuList.js";
 import makeMenuEndpointHandler from "./menuEndpoint.js";
 

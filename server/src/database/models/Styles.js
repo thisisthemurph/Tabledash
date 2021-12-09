@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const RestaurantStylesSchema = new mongoose.Schema(
+const Styles = new mongoose.Schema(
   {
     primaryColor: { type: String, default: "#85144b", required: true },
     fontStyle: {
@@ -14,4 +14,4 @@ const RestaurantStylesSchema = new mongoose.Schema(
   { collection: "restaurant" }
 );
 
-export default RestaurantStylesSchema;
+export default Styles;

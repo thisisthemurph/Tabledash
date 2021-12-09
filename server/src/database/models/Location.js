@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const RestaurantLocationSchema = new mongoose.Schema(
+const Location = new mongoose.Schema(
   {
     townOrCity: { type: String },
     postcode: { type: String },
@@ -9,4 +9,4 @@ const RestaurantLocationSchema = new mongoose.Schema(
   { collection: "restaurant" }
 );
 
-export default RestaurantLocationSchema;
+export default Location;

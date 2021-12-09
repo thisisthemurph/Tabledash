@@ -1,4 +1,4 @@
-import UserModel from "../database/models/UserSchema.js";
+import UserModel from "../database/models/User.js";
 import makeUserList from "./userList.js";
 import makeUserEndpointHandler from "./userEndpoint.js";
 
