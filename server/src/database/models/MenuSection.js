@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import MenuItem from "./MenuItem";
+import MenuItem from "./MenuItem.js";
 
 const MenuSection = new mongoose.Schema(
   {
