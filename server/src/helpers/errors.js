@@ -25,7 +25,6 @@ export class MenuNotFoundError extends Error {
 
 export class UserNotFoundError extends Error {
   constructor({ userId, username, email }) {
-    console.log({ userId, username, email });
     const key = userId ? "ID" : username ? "username" : "email";
     const value = userId ? userId : username ? username : email;
 
