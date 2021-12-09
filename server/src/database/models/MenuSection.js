@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 
+import MenuItem from "./MenuItem";
+
 const MenuSection = new mongoose.Schema(
   {
     name: { type: String, required: true },
-    description: { type: String, required: true },
-    price: { type: Number, required: true },
+    description: { type: String },
+    items: [MenuItem],
   },
   { timestamps: true },
   { collection: "restaurant" }

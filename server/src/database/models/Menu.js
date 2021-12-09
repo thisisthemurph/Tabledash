@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-import MenuItem from "./MenuItem.js";
+import MenuSection from "./MenuSection.js";
 
 const Menu = new mongoose.Schema(
   {
@@ -10,7 +10,7 @@ const Menu = new mongoose.Schema(
       {
         name: { type: String, required: true },
         desription: { type: String },
-        items: [MenuItem],
+        sections: [MenuSection],
       },
     ],
   },
