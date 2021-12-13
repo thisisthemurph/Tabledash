@@ -10,20 +10,24 @@ import Register from "../pages/Register";
 import Dashboard from "../pages/Dashboard";
 
 import { login } from "../api/auth";
+import { getRestaurantById } from "../api/restaurant";
 import useUser from "../hooks/useUser";
 import useToken from "../hooks/useToken";
 import { UserContext } from "../context/UserContext";
+import { RestaurantContext } from "../context/RestaurantContext";
 
 function App() {
   const { user, setUser } = useUser();
   const { token, setToken } = useToken();
   const [isAuthenticated, setIsAuthenticated] = useState();
+  const [restaurant, setRestaurant] = useState(null);
   const navigate = useNavigate();
 
   const performLogout = () => {
     setUser({});
     setToken(null);
     setIsAuthenticated(false);
+    setRestaurant(null);
     localStorage.removeItem("token");
   };
 
@@ -34,6 +38,20 @@ function App() {
       setUser(user);
       setToken(token);
       setIsAuthenticated(true);
+
+      // Fetch and set the restaurant for the logged in user
+
+      const restaurantId = user.restaurant;
+      if (restaurantId) {
+        const { success, restaurant } = await getRestaurantById({
+          restaurantId,
+        });
+
+        if (success) {
+          setRestaurant(restaurant);
+        }
+      }
+
       navigate("/dashboard");
     }
   };
@@ -48,15 +66,22 @@ function App() {
     isAuthenticated,
   };
 
+  const restaurantContext = {
+    restaurant,
+    setRestaurant,
+  };
+
   return (
     <UserContext.Provider value={userContext}>
-      <Header />
-      <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <RestaurantContext.Provider value={restaurantContext}>
+        <Header />
+        <Routes>
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Home />} />
+        </Routes>
+      </RestaurantContext.Provider>
     </UserContext.Provider>
   );
 }

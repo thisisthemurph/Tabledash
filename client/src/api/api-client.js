@@ -1,9 +1,6 @@
 import { API_BASE_URL } from "../config";
 
-const client = async (
-  endpoint,
-  { body = null, method = null, headers = {} }
-) => {
+const client = async (endpoint, { body, method, headers } = {}) => {
   const config = {
     method: method ? method : body ? "POST" : "GET",
     headers: {

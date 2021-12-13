@@ -1,6 +1,6 @@
 import client from "../api-client";
 
-export const getRestaurant = async ({ restaurantId }) => {
+export const getRestaurantById = async ({ restaurantId }) => {
   const restaurant = await client(`restaurant/${restaurantId}`);
   return restaurant;
 };
