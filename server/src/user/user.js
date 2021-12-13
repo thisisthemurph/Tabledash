@@ -19,7 +19,15 @@ export default function makeUser(userInfo = requiredParam("userInfo")) {
   }) {
     validateUsername(username);
     validateEmail(isAdmin, email);
-    return { ...otherInfo, name, email, username, password, isAdmin };
+
+    return {
+      ...otherInfo,
+      name,
+      email,
+      username,
+      password,
+      isAdmin,
+    };
   }
 
   function validateUsername(username) {

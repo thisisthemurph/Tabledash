@@ -13,11 +13,10 @@ export default function makeRestaurant(
   function validate({
     name = requiredParam("name"),
     users = requiredParam("users"),
-    location = requiredParam("location"),
     ...otherInfo
   } = {}) {
     validateName(name);
-    return { name, users, location, ...otherInfo };
+    return { name, users, ...otherInfo };
   }
 
   function validateName(name) {

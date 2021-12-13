@@ -1,7 +1,7 @@
 import makeRestaurant from "./restaurant.js";
 import { RestaurantNotFoundError } from "../helpers/errors.js";
 
-export default function makeRestaurantList({ RestaurantModel }) {
+export default function makeRestaurantList({ User, RestaurantModel }) {
   return Object.freeze({
     add,
     findById,
@@ -15,7 +15,7 @@ export default function makeRestaurantList({ RestaurantModel }) {
    * @param {Object} restaurant an object representing a Restaurant
    * @returns the restaurant object added
    */
-  async function add({ ...restaurant } = {}) {
+  async function add({ userId, ...restaurant } = {}) {
     let newRestaurant = new RestaurantModel(restaurant);
     newRestaurant = await newRestaurant.save();
 
@@ -25,17 +25,26 @@ export default function makeRestaurantList({ RestaurantModel }) {
       );
     }
 
+    // Update the current user with the Restaurant ID number
+
+    await User.findByIdAndUpdate(
+      userId,
+      { restaurant: newRestaurant._id },
+      { returnDocument: "after" }
+    );
+
     return modelToRestaurant(JSON.parse(JSON.stringify(newRestaurant)));
   }
 
   /**
    * Finds a restaurant with the given restaurantId
+   * @param {Object[]} restaurant
    * @param {String} restaurant.restaurantId the ID of the restaurant
    * @returns an object representing a Restaurant
    */
   async function findById({ restaurantId }) {
     const found = await RestaurantModel.findById(restaurantId)
-      .populate("users")
+      .populate({ path: "users" })
       .lean();
 
     if (!found) {
@@ -99,7 +108,7 @@ export default function makeRestaurantList({ RestaurantModel }) {
    * @param {Object} restaurant the restaurant model to be converted
    * @returns an Object representing a Restaurant
    */
-  function modelToRestaurant({ _id: restaurantId, ...model }) {
+  function modelToRestaurant({ _id: restaurantId, __v, ...model }) {
     return makeRestaurant({ restaurantId, ...model });
   }
 }

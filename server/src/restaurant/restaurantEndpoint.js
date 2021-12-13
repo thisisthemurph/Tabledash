@@ -47,7 +47,10 @@ export default function makeRestaurantEndpointHandler({ restaurantList }) {
 
     try {
       const restaurant = makeRestaurant(jsonResult);
-      const created = await restaurantList.add(restaurant);
+      const created = await restaurantList.add({
+        ...restaurant,
+        userId: httpRequest.user.userId,
+      });
 
       return makeHttpResponse({ statusCode: 201, data: { created } });
     } catch (error) {

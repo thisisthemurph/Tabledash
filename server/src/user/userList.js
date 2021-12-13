@@ -2,7 +2,7 @@ import makeUser from "./user.js";
 import { UserExistsError, UserNotFoundError } from "../helpers/errors.js";
 import bcrypt from "bcrypt";
 
-export default function makeUserList({ UserModel }) {
+export default function makeUserList({ User }) {
   return Object.freeze({
     add,
     find,
@@ -14,8 +14,8 @@ export default function makeUserList({ UserModel }) {
 
     // Verify if a user with username already exists
 
-    const usernameExists = await UserModel.findOne({ username }).lean();
-    const emailExists = await UserModel.findOne({ email }).lean();
+    const usernameExists = await User.findOne({ username }).lean();
+    const emailExists = await User.findOne({ email }).lean();
 
     if (usernameExists) {
       throw new UserExistsError({ username });
@@ -30,7 +30,7 @@ export default function makeUserList({ UserModel }) {
 
     // Create the user
 
-    let newUser = new UserModel({
+    let newUser = new User({
       username,
       email,
       password: hashedPassword,
@@ -47,7 +47,7 @@ export default function makeUserList({ UserModel }) {
   }
 
   async function find({ userId, username, email }) {
-    const user = await UserModel.findOne({
+    const user = await User.findOne({
       $or: [{ _id: userId }, { username }, { email }],
     });
 
@@ -59,7 +59,7 @@ export default function makeUserList({ UserModel }) {
   }
 
   async function update({ userId, ...userInfo }) {
-    const updated = await UserModel.findByIdAndUpdate(
+    const updated = await User.findByIdAndUpdate(
       userId,
       { ...userInfo },
       { returnDocument: "after" }
@@ -72,7 +72,7 @@ export default function makeUserList({ UserModel }) {
     return modelToUser(updated._doc);
   }
 
-  function modelToUser({ _id: userId, ...model }) {
+  function modelToUser({ _id: userId, __v, ...model }) {
     return makeUser({ userId, ...model });
   }
 }

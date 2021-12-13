@@ -11,7 +11,7 @@ import {
 import makeUser from "../user/user.js";
 import makeAuth from "./auth.js";
 
-export default function makeAuthList({ UserModel }) {
+export default function makeAuthList({ User }) {
   return Object.freeze({
     login,
     verifyToken,
@@ -22,9 +22,7 @@ export default function makeAuthList({ UserModel }) {
 
     // Ensure the user exists
 
-    const user = await UserModel.findOne({ username })
-      .select("+password")
-      .lean();
+    const user = await User.findOne({ username }).select("+password").lean();
     if (!user) {
       throw new UserNotFoundError({ username });
     }
@@ -51,7 +49,7 @@ export default function makeAuthList({ UserModel }) {
     }
 
     const { user: decodedUser } = decodedToken;
-    let user = await UserModel.findById(decodedUser.userId).lean();
+    let user = await User.findById(decodedUser.userId).lean();
 
     if (!user) {
       throw new UnauthorizedAccessError("No known user associated with token.");
@@ -65,7 +63,7 @@ export default function makeAuthList({ UserModel }) {
     return { success, user: makeUser({ userId, ...user }) };
   }
 
-  function modelToUser({ _id: userId, ...model }) {
+  function modelToUser({ _id: userId, resraurant, ...model }) {
     return makeUser({ userId, ...model });
   }
 }
