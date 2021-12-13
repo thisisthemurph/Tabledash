@@ -1,12 +1,16 @@
 import { API_BASE_URL } from "../config";
 
-const client = async (endpoint, { body, ...customConfig }) => {
+const client = async (
+  endpoint,
+  { body = null, method = null, headers = {} }
+) => {
   const config = {
-    method: body ? "POST" : "GET",
+    method: method ? method : body ? "POST" : "GET",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      ...customConfig.headers,
+      "auth-token": localStorage.getItem("token"),
+      ...headers,
     },
   };
 

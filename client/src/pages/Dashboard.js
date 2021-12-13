@@ -1,17 +1,19 @@
 import { useContext } from "react";
+import CreateRestaurant from "../components/CreateRestaurant";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { UserContext } from "../context/UserContext";
 
 const Dashboard = () => {
   const { user } = useContext(UserContext);
+  const { restaurant } = user;
 
   return (
     <ProtectedRoute>
-      <div className="section">
-        <h1>Dashboard</h1>
-        <p>You can only see this if you are logged in.</p>
-        <pre>The user: {JSON.stringify(user, null, 2)}</pre>
-      </div>
+      <h1 className="section">Dashboard</h1>
+
+      {!restaurant && <CreateRestaurant />}
+
+      <pre>The user: {JSON.stringify(user, null, 2)}</pre>
     </ProtectedRoute>
   );
 };
