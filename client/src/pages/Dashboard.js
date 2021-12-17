@@ -1,4 +1,6 @@
 import { useContext } from "react";
+
+// import MenuBuilder from "../components/MenuBuilder";
 import CreateRestaurant from "../components/CreateRestaurant";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { RestaurantContext } from "../context/RestaurantContext";
@@ -14,6 +16,8 @@ const Dashboard = () => {
       <h1 className="section">Dashboard</h1>
 
       {!restaurantId && <CreateRestaurant />}
+
+      {/* {!restaurant?.menus.length && <MenuBuilder />} */}
 
       <pre>The user: {JSON.stringify(user, null, 2)}</pre>
       <pre>The restaurant: {JSON.stringify(restaurant, null, 2)}</pre>

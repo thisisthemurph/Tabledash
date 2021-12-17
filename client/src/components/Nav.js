@@ -1,9 +1,16 @@
+import { Button } from "@mui/material";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../context/UserContext";
 
-const Nav = () => {
+const buttonStyling = {
+  margin: "auto",
+  width: "30%",
+  marginBottom: 15,
+};
+
+const Nav = ({ closeNav }) => {
   const navigate = useNavigate();
   const { logout, isAuthenticated } = useContext(UserContext);
 
@@ -16,29 +23,53 @@ const Nav = () => {
   return (
     <nav className="nav">
       <div className="nav__section">
-        <Link to="/">Home</Link>
-        <Link to="/dashboard">Dashboard</Link>
+        <Link to="/" onClick={closeNav}>
+          Home
+        </Link>
+        <Link to="/dashboard" onClick={closeNav}>
+          Dashboard
+        </Link>
       </div>
       <div className="nav__section">
         {!isAuthenticated && (
           <>
-            <Link className="button button-secondary" to="/login">
+            <Button
+              variant="outlined"
+              size="large"
+              color="primary"
+              href="/login"
+              style={{ ...buttonStyling }}
+            >
               Login
-            </Link>
-            <Link className="button button-primary" to="/register">
+            </Button>
+            <Button
+              variant="contained"
+              size="large"
+              color="primary"
+              href="/register"
+              style={{ ...buttonStyling }}
+            >
               Register
-            </Link>
+            </Button>
           </>
         )}
 
         {isAuthenticated && (
-          <Link
-            className="button button-secondary"
-            to="/logout"
+          // <Link
+          //   className="button button-primary"
+          //   to="/logout"
+          //   onClick={handleLogout}
+          // >
+          //   Logout
+          // </Link>
+          <Button
+            variant="outlined"
+            color="primary"
             onClick={handleLogout}
+            style={{ ...buttonStyling }}
           >
             Logout
-          </Link>
+          </Button>
         )}
       </div>
     </nav>

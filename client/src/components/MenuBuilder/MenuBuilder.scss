@@ -1,0 +1,108 @@
+// .menubuilder {
+//   &__menuinfo {
+//     // display: flex;
+//     // flex-direction: column;
+//   }
+
+//   &__section {
+//     display: grid;
+//     grid-template-columns: 2fr 0.25fr;
+//     grid-template-areas:
+//       "title menu"
+//       "description description"
+//       "items items";
+
+//     &-title {
+//       grid-area: title;
+//     }
+
+//     &-description {
+//       grid-area: description;
+
+//       &--closed {
+//         font-style: italic;
+//         color: lighten(black, 45%);
+//       }
+//     }
+
+//     &-menu {
+//       grid-area: menu;
+//       display: flex;
+//       justify-content: flex-end;
+//       align-items: flex-start;
+//     }
+
+//     &-itemlist {
+//       grid-area: items;
+//     }
+
+//     &:nth-child(odd) {
+//       background: rgb(230, 230, 230);
+//     }
+
+//     &--closed {
+//       grid-template-areas:
+//         "title menu"
+//         "description description";
+//     }
+//   }
+
+//   &__item {
+//     display: grid;
+//     grid-template-columns: 1fr 0.3fr;
+//     grid-template-rows: 1fr 1.75fr;
+//     grid-template-areas:
+//       "name price"
+//       "desc desc";
+
+//     margin: 1rem 0;
+//     padding: 1rem;
+
+//     &--viewmode {
+//       grid-template-columns: 1fr 0.3fr 0.2fr;
+//       grid-template-rows: 1fr 1.75fr;
+//       grid-template-areas:
+//         "name price menu"
+//         "desc desc desc";
+//     }
+
+//     &-name {
+//       grid-area: name;
+//     }
+
+//     &-description {
+//       grid-area: desc;
+
+//       &--viewmode {
+//         font-style: italic;
+//         color: lighten(black, 40%);
+//       }
+//     }
+
+//     &-price {
+//       grid-area: price;
+
+//       &--viewmode {
+//         text-align: center;
+//         font-size: 1.25rem;
+//       }
+//     }
+
+//     &-menu {
+//       grid-area: menu;
+//       display: flex;
+//       justify-content: flex-end;
+//       align-items: flex-start;
+//     }
+
+//     &buttongroup {
+//       grid-area: btns;
+
+//       &--viewmode {
+//         display: flex;
+//         justify-content: flex-end;
+//         align-items: flex-start;
+//       }
+//     }
+//   }
+// }

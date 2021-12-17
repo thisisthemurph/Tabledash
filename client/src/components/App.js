@@ -16,6 +16,20 @@ import useToken from "../hooks/useToken";
 import { UserContext } from "../context/UserContext";
 import { RestaurantContext } from "../context/RestaurantContext";
 
+import { createTheme, ThemeProvider } from "@mui/material";
+import { pink } from "@mui/material/colors";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: pink[200],
+    },
+    secondary: {
+      main: pink[400],
+    },
+  },
+});
+
 function App() {
   const { user, setUser } = useUser();
   const { token, setToken } = useToken();
@@ -74,13 +88,15 @@ function App() {
   return (
     <UserContext.Provider value={userContext}>
       <RestaurantContext.Provider value={restaurantContext}>
-        <Header />
-        <Routes>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-        </Routes>
+        <ThemeProvider theme={theme}>
+          <Header />
+          <Routes>
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </ThemeProvider>
       </RestaurantContext.Provider>
     </UserContext.Provider>
   );

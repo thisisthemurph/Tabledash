@@ -1,3 +1,4 @@
+import { Button, Stack, TextField } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
@@ -73,59 +74,55 @@ const Register = () => {
   };
 
   return (
-    <div className="section">
+    <Stack
+      component="form"
+      spacing={2}
+      onSubmit={handleSubmit}
+      className="section"
+    >
       <h2>Register</h2>
-      <form onSubmit={handleSubmit} className="form">
-        {error ? (
-          <div className="error">
-            <p>{error}</p>
-          </div>
-        ) : null}
 
-        <div className="form__section">
-          <label htmlFor="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            placeholder="Name"
-            value={formValues.name}
-            onChange={(e) => updateForm("name", e)}
-          />
+      {error ? (
+        <div className="error">
+          <p>{error}</p>
         </div>
-        <div className="form__section">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="Username"
-            value={formValues.username}
-            onChange={(e) => updateForm("username", e)}
-          />
-        </div>
-        <div className="form__section">
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            placeholder="you@domain.com"
-            value={formValues.email}
-            onChange={(e) => updateForm("email", e)}
-          />
-        </div>
-        <div className="form__section">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={formValues.password}
-            onChange={(e) => updateForm("password", e)}
-          />
-        </div>
-        <div className="form__section">
-          <input type="submit" value="Register" disabled={!canSubmit} />
-        </div>
-      </form>
-    </div>
+      ) : null}
+
+      <TextField
+        label="Name"
+        value={formValues.name}
+        onChange={(e) => updateForm("name", e)}
+      />
+
+      <TextField
+        label="Username"
+        value={formValues.username}
+        onChange={(e) => updateForm("username", e)}
+      />
+
+      <TextField
+        type="email"
+        label="Email address"
+        value={formValues.email}
+        onChange={(e) => updateForm("email", e)}
+      />
+
+      <TextField
+        type="password"
+        label="Password"
+        value={formValues.password}
+        onChange={(e) => updateForm("password", e)}
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        disabled={!canSubmit}
+      >
+        Register
+      </Button>
+    </Stack>
   );
 };
 

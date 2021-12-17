@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import MenuBuilder from "../components/MenuBuilder";
 
 const Home = () => {
   return (
-    <div className="section">
-      <h1>Home Page</h1>
-      <Link to="/register">Sign up now...</Link>
+    <div>
+      <h1 className="section">Home Page</h1>
+      <MenuBuilder />
     </div>
   );
 };

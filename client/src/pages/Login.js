@@ -1,3 +1,4 @@
+import { Button, Stack, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 
 import { UserContext } from "../context/UserContext";
@@ -52,39 +53,43 @@ const Login = () => {
   };
 
   return (
-    <div className="section">
+    <Stack
+      component="form"
+      spacing={2}
+      onSubmit={handleSubmit}
+      className="section"
+    >
       <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="form">
-        {error ? (
-          <div className="error">
-            <p>{error}</p>
-          </div>
-        ) : null}
+      {error ? (
+        <div className="error">
+          <p>{error}</p>
+        </div>
+      ) : null}
 
-        <div className="form__section">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            placeholder="Username"
-            value={formValues.username}
-            onChange={(e) => updateForm("username", e)}
-          />
-        </div>
-        <div className="form__section">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={formValues.password}
-            onChange={(e) => updateForm("password", e)}
-          />
-        </div>
-        <div className="form__section">
-          <input type="submit" value="Login" disabled={!canSubmit} />
-        </div>
-      </form>
-    </div>
+      <TextField
+        id="username"
+        label="Username"
+        value={formValues.username}
+        onChange={(e) => updateForm("username", e)}
+      />
+
+      <TextField
+        id="username"
+        label="Password"
+        type="password"
+        value={formValues.password}
+        onChange={(e) => updateForm("password", e)}
+      />
+
+      <Button
+        type="submit"
+        variant="contained"
+        size="large"
+        disabled={!canSubmit}
+      >
+        Login
+      </Button>
+    </Stack>
   );
 };
 
