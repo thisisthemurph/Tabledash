@@ -139,7 +139,7 @@ const MenuBuilder = () => {
   };
 
   return (
-    <Box component="form" className="menubuilder">
+    <Box component="form">
       <Stack className="section" direction="column" spacing={2}>
         <h2>Menu Builder</h2>
 
@@ -160,7 +160,6 @@ const MenuBuilder = () => {
         />
       </Stack>
 
-      {/* <Stack className="menubuilder__sectionlist"> */}
       <Stack direction="column" spacing={2}>
         {menu.sections.map((section, idx) => (
           <Section
@@ -180,9 +179,17 @@ const MenuBuilder = () => {
           />
         ))}
       </Stack>
-      <Button variant="contained" color="secondary" onClick={handleAddSection}>
-        Add New Section
-      </Button>
+
+      <Stack direction="row" className="section">
+        <Button
+          fullWidth
+          variant="outlined"
+          color="primary"
+          onClick={handleAddSection}
+        >
+          Add New Section
+        </Button>
+      </Stack>
     </Box>
   );
 };

@@ -6,6 +6,7 @@ import {
   Grid,
   ButtonGroup,
   Button,
+  Stack,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -38,8 +39,8 @@ const ItemEditable = ({
         yesValue="Delete"
       />
 
-      <Grid container spacing={2}>
-        <Grid item xs={10}>
+      <Stack spacing={2}>
+        <Stack direction="row" justifyContent="space-between">
           <ButtonGroup>
             <Button>
               <ArrowUpwardIcon />
@@ -51,45 +52,41 @@ const ItemEditable = ({
               <DeleteIcon />
             </Button>
           </ButtonGroup>
-        </Grid>
 
-        <Grid item xs={2} align="center" justify="center">
           <IconButton onClick={handleClose}>
             <CloseIcon />
           </IconButton>
-        </Grid>
+        </Stack>
 
-        <Grid item xs={8}>
+        <Stack direction="row" spacing={1}>
           <TextField
             fullWidth
+            required
             label="Item Name"
             variant="outlined"
             value={name}
             onChange={(e) => handleUpdateItem(e, "name")}
           />
-        </Grid>
 
-        <Grid item xs={4}>
           <TextField
             fullWidth
-            label="Price"
+            required
+            label="Price (£)"
             type="number"
             value={price}
             onChangeCapture={(e) => handleUpdateItem(e, "price")}
           />
-        </Grid>
+        </Stack>
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Description"
-            multiline
-            rows={2}
-            value={description}
-            onChangeCapture={(e) => handleUpdateItem(e, "description")}
-          />
-        </Grid>
-      </Grid>
+        <TextField
+          fullWidth
+          label="Description"
+          multiline
+          rows={2}
+          value={description}
+          onChangeCapture={(e) => handleUpdateItem(e, "description")}
+        />
+      </Stack>
     </Paper>
   );
 };

@@ -20,7 +20,9 @@ const ItemNonEditable = ({ name, description, price, activateEditMode }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <p style={{ fontWeight: "bold" }}>{price}</p>
+          <p style={{ fontWeight: "bold" }}>
+            £{!isNaN(price) ? price.toFixed(2) : price}
+          </p>
         </Grid>
       </Grid>
     </Paper>

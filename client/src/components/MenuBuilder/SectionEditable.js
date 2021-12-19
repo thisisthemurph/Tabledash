@@ -10,10 +10,13 @@ import {
   ListItemText,
   Grid,
   Stack,
+  ButtonGroup,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import KebabIcon from "@mui/icons-material/MoreVert";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Item from "./Item";
 import BooleanAlert from "../BooleanAlert";
@@ -30,11 +33,8 @@ const SectionEditable = ({
   updateItem,
   deleteItem,
 }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
   const [canAddNewItem, setCanAddNewItem] = useState(false);
   const [itemEditIndex, setItemEditIndex] = useState(-1);
-  const sectionOpen = Boolean(anchorEl);
-
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
   const validate = ({ name, description, price }) => {
@@ -69,10 +69,6 @@ const SectionEditable = ({
     handleSetEditingItem(e, -1);
   };
 
-  const handleMenuClick = (e) => {
-    setAnchorEl(e.currentTarget);
-  };
-
   return (
     <>
       <BooleanAlert
@@ -85,51 +81,38 @@ const SectionEditable = ({
         yesValue="Delete"
       />
 
-      <Grid container spacing={2} className="section">
-        <Grid item xs={10.5}>
-          <TextField
-            fullWidth
-            label="Section Title"
+      <Stack className="section" spacing={2}>
+        <Stack direction="row" justifyContent="space-between">
+          <Button
             variant="outlined"
-            value={name}
-            onChange={(e) => handleUpdateSection("name", e)}
-          />
-        </Grid>
-
-        <Grid item xs={1.5} alignContent="center" justify="center">
-          <IconButton
-            aria-controls="section-menu"
-            aria-haspopup="true"
-            aria-expanded={sectionOpen ? "true" : undefined}
-            onClick={handleMenuClick}
+            onClick={() => setDeleteAlertOpen(true)}
+            color="error"
           >
-            <KebabIcon />
+            <DeleteIcon />
+          </Button>
+          <IconButton onClick={closeSection}>
+            <ExpandLessIcon />
           </IconButton>
+        </Stack>
 
-          <SectionOptionsMenu
-            anchorEl={anchorEl}
-            onClose={() => setAnchorEl(null)}
-            sectionIndex={sectionIndex}
-            handleSectionOpen={sectionOpen}
-            handleSectionClose={closeSection}
-            handleDeleteSection={() => setDeleteAlertOpen(true)}
-          />
-        </Grid>
+        <TextField
+          fullWidth
+          label="Section Title"
+          variant="outlined"
+          value={name}
+          onChange={(e) => handleUpdateSection("name", e)}
+        />
 
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Section Description"
-            variant="outlined"
-            value={description}
-            multiline
-            rows={2}
-            onChange={(e) => handleUpdateSection("description", e)}
-          />
-        </Grid>
-      </Grid>
+        <TextField
+          fullWidth
+          label="Section Description"
+          variant="outlined"
+          value={description}
+          multiline
+          rows={2}
+          onChange={(e) => handleUpdateSection("description", e)}
+        />
 
-      <Grid item xs={12}>
         <Stack direction="column" spacing={2}>
           {items.map((item, idx) => (
             <Item
@@ -146,56 +129,18 @@ const SectionEditable = ({
               closeItem={handleCloseAllItems}
             />
           ))}
-        </Stack>
-      </Grid>
 
-      <Grid container spacking={2} className="section">
-        <Grid item xs={12}>
           <Button
             variant="contained"
-            color="secondary"
+            color="primary"
             onClick={(e) => handleAddItem(e, sectionIndex)}
             disabled={!canAddNewItem}
           >
             Add New Item
           </Button>
-        </Grid>
-      </Grid>
+        </Stack>
+      </Stack>
     </>
-  );
-};
-
-const SectionOptionsMenu = ({
-  anchorEl,
-  onClose,
-  sectionIndex,
-  handleSectionOpen,
-  handleSectionClose,
-  handleDeleteSection,
-}) => {
-  return (
-    <Menu
-      id="section-menu"
-      anchorEl={anchorEl}
-      open={handleSectionOpen}
-      onClose={onClose}
-      MenuListProps={{
-        "aria-labelledby": "item-menu-button",
-      }}
-    >
-      <MenuItem onClick={handleSectionClose}>
-        <ListItemIcon>
-          <CloseIcon />
-        </ListItemIcon>
-        <ListItemText>Close</ListItemText>
-      </MenuItem>
-      <MenuItem onClick={(e) => handleDeleteSection(e, sectionIndex)}>
-        <ListItemIcon>
-          <DeleteIcon color="error" />
-        </ListItemIcon>
-        <ListItemText>Delete</ListItemText>
-      </MenuItem>
-    </Menu>
   );
 };
 
