@@ -16,21 +16,12 @@ import useToken from "../hooks/useToken";
 import { UserContext } from "../context/UserContext";
 import { RestaurantContext } from "../context/RestaurantContext";
 
-import { createTheme, ThemeProvider } from "@mui/material";
-import { pink } from "@mui/material/colors";
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: pink[200],
-    },
-    secondary: {
-      main: pink[400],
-    },
-  },
-});
+import { Paper, ThemeProvider } from "@mui/material";
+import { darkTheme, lightTheme } from "../hooks/useStyles";
+import useDarkMode from "../hooks/useDarkMode";
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useDarkMode();
   const { user, setUser } = useUser();
   const { token, setToken } = useToken();
   const [isAuthenticated, setIsAuthenticated] = useState();
@@ -88,14 +79,19 @@ function App() {
   return (
     <UserContext.Provider value={userContext}>
       <RestaurantContext.Provider value={restaurantContext}>
-        <ThemeProvider theme={theme}>
-          <Header />
-          <Routes>
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Home />} />
-          </Routes>
+        <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
+          <Paper elevation={0} square style={{ minHeight: "100vh" }}>
+            <Header
+              isDarkMode={isDarkMode}
+              toggleTheme={() => setIsDarkMode(!isDarkMode)}
+            />
+            <Routes>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/" element={<Home />} />
+            </Routes>
+          </Paper>
         </ThemeProvider>
       </RestaurantContext.Provider>
     </UserContext.Provider>

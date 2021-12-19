@@ -1,18 +1,17 @@
-import { Button } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { UserContext } from "../context/UserContext";
+import useStyles from "../hooks/useStyles";
+import ThemeToggle from "./MenuBuilder/ThemeToggle";
 
-const buttonStyling = {
-  margin: "auto",
-  width: "30%",
-  marginBottom: 15,
-};
-
-const Nav = ({ closeNav }) => {
+const Nav = ({ closeNav, isDarkMode, toggleTheme }) => {
   const navigate = useNavigate();
   const { logout, isAuthenticated } = useContext(UserContext);
+
+  const theme = useTheme();
+  const classes = useStyles(theme);
 
   const handleLogout = (event) => {
     event.preventDefault();
@@ -20,8 +19,10 @@ const Nav = ({ closeNav }) => {
     navigate("/login");
   };
 
+  console.log(classes.root);
+
   return (
-    <nav className="nav">
+    <nav className="nav" style={{ position: "relative" }}>
       <div className="nav__section">
         <Link to="/" onClick={closeNav}>
           Home
@@ -38,7 +39,7 @@ const Nav = ({ closeNav }) => {
               size="large"
               color="primary"
               href="/login"
-              style={{ ...buttonStyling }}
+              className={classes.navButton}
             >
               Login
             </Button>
@@ -47,7 +48,7 @@ const Nav = ({ closeNav }) => {
               size="large"
               color="primary"
               href="/register"
-              style={{ ...buttonStyling }}
+              className={classes.navButton}
             >
               Register
             </Button>
@@ -55,22 +56,17 @@ const Nav = ({ closeNav }) => {
         )}
 
         {isAuthenticated && (
-          // <Link
-          //   className="button button-primary"
-          //   to="/logout"
-          //   onClick={handleLogout}
-          // >
-          //   Logout
-          // </Link>
           <Button
             variant="outlined"
             color="primary"
             onClick={handleLogout}
-            style={{ ...buttonStyling }}
+            className={classes.navButton}
           >
             Logout
           </Button>
         )}
+
+        <ThemeToggle isDarkMode={isDarkMode} handleOnClick={toggleTheme} />
       </div>
     </nav>
   );
