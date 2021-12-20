@@ -4,7 +4,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import Item from "./Item";
-import BooleanAlert from "../BooleanAlert";
+import { ConfirmationDialog } from "../AlertDialog";
 import { SectionContext, ItemContext } from "./MenuBuilderContext";
 
 const SectionEditable = ({ sectionIndex, name, description, items }) => {
@@ -42,14 +42,14 @@ const SectionEditable = ({ sectionIndex, name, description, items }) => {
 
   return (
     <>
-      <BooleanAlert
+      <ConfirmationDialog
         title="Deleting section"
         body="Are you sure you want to delete this section? This cannot be undone!"
         open={deleteAlertOpen}
         handleClose={() => setDeleteAlertOpen(false)}
         onConfirm={handleDeleteSection}
-        noValue="Cancel"
-        yesValue="Delete"
+        rejectBtnText="Cancel"
+        confirmBtnText="Delete"
       />
 
       <Stack className="section" spacing={2}>

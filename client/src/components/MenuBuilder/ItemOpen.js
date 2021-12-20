@@ -13,7 +13,7 @@ import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import CloseIcon from "@mui/icons-material/Close";
 
 import { MenuContext, SectionContext } from "./MenuBuilderContext";
-import BooleanAlert from "../BooleanAlert";
+import { ConfirmationDialog } from "../AlertDialog";
 
 const ItemEditable = ({
   itemIndex,
@@ -62,14 +62,14 @@ const ItemEditable = ({
 
   return (
     <Paper elevation={4} className="section">
-      <BooleanAlert
+      <ConfirmationDialog
         title="Deleting item..."
         body={`Are you sure you would like to delete "${name}". It will not be possible to undo this action.`}
         open={deleteItemAlertOpen}
         handleClose={() => setDeleteItemAlertOpen(false)}
         onConfirm={(e) => handleDeleteItem(e)}
-        noValue="Cancel"
-        yesValue="Delete"
+        confirmBtnText="Delete"
+        rejectBtnText="Cancel"
       />
 
       <Stack spacing={2}>

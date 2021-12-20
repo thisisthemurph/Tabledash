@@ -1,11 +1,13 @@
 import { useContext, useState } from "react";
 
+import { NotificationDialog } from "../AlertDialog";
 import SectionOpen from "./SectionOpen";
 import SectionClosed from "./SectionClosed";
 import { MenuContext, SectionContext, initialItem } from "./MenuBuilderContext";
 
 const Section = ({ sectionIndex, name, description, items }) => {
   const [editModeItemIndex, setEditModeItemIndex] = useState(-1);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const { menu, setMenu, activeSectionIndex, setActiveSectionIndex } =
     useContext(MenuContext);
 
@@ -22,7 +24,7 @@ const Section = ({ sectionIndex, name, description, items }) => {
     e.preventDefault();
 
     if (menu.sections.length === 1) {
-      alert("You must have at least one section in the menu.");
+      setShowDeleteConfirmation(true);
       return;
     }
 
@@ -69,6 +71,12 @@ const Section = ({ sectionIndex, name, description, items }) => {
   if (activeSectionIndex === sectionIndex) {
     return (
       <SectionContext.Provider value={openSectionContext}>
+        <NotificationDialog
+          title="Cannot Delete Section"
+          body="There must be at least one section in the menu."
+          handleClose={() => setShowDeleteConfirmation(false)}
+          open={showDeleteConfirmation}
+        />
         <SectionOpen
           sectionIndex={sectionIndex}
           name={name}

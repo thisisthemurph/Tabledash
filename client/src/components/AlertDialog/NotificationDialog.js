@@ -7,20 +7,13 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-const BooleanAlert = ({
+const NotificationDialog = ({
   title,
   body,
   open,
   handleClose,
-  onConfirm,
-  yesValue = "Yes",
-  noValue = "No",
+  btnText = "OK",
 }) => {
-  const handleOnConfirm = (e) => {
-    handleClose();
-    onConfirm(e);
-  };
-
   return (
     <Dialog
       open={open}
@@ -33,15 +26,12 @@ const BooleanAlert = ({
         <DialogContentText>{body}</DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button variant="outlined" onClick={handleClose}>
-          {noValue}
-        </Button>
-        <Button variant="contained" autoFocus onClick={handleOnConfirm}>
-          {yesValue}
+        <Button variant="contained" autoFocus onClick={handleClose}>
+          {btnText}
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
 
-export default BooleanAlert;
+export default NotificationDialog;
