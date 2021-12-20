@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import {
   Box,
@@ -6,6 +6,7 @@ import {
   Drawer,
   IconButton,
   List,
+  ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
@@ -32,11 +33,10 @@ const ToggleDrawer = ({ position, nav }) => {
 
       {nav.heading.text && (
         <ListItemButton
-          key={nav.heading.text}
           component={nav.heading?.href ? "a" : undefined}
           href={nav.heading?.href || undefined}
           onClick={nav.heading?.onClick || undefined}
-          sx={{ mb: 2 }}
+          sx={{ mb: 1 }}
         >
           <ListItemIcon>{nav.heading.icon}</ListItemIcon>
           <ListItemText
@@ -55,16 +55,11 @@ const ToggleDrawer = ({ position, nav }) => {
 
       {/* The main aspects of the navigation */}
 
-      {nav.menu.sections.map((section, idx) => {
+      {nav.menu.sections.map((section, sectionIdx) => {
         return (
-          <>
+          <List key={sectionIdx.toString()}>
             {section.heading ? (
-              <ListItemButton
-                component="a"
-                href={section.heading.href}
-                sx={{ mb: 2 }}
-              >
-                <ListItemIcon>{section.heading.icon}</ListItemIcon>
+              <ListItem sx={{ mb: 0.5 }}>
                 <ListItemText
                   sx={{ my: 0 }}
                   primary={section.heading.text}
@@ -74,37 +69,35 @@ const ToggleDrawer = ({ position, nav }) => {
                     letterSpacing: 0,
                   }}
                 >
-                  {section.heading.text}
+                  {section.heading}
                 </ListItemText>
-              </ListItemButton>
+              </ListItem>
             ) : null}
-            <List key={idx.toString()}>
-              {section.items.map((item) => (
-                <ListItemButton
-                  key={item.text}
-                  component={item?.href ? "a" : undefined}
-                  href={item?.href || undefined}
-                  onClick={item?.onClick || undefined}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText>{item.text}</ListItemText>
-                </ListItemButton>
-              ))}
-            </List>
-            {idx < nav.menu.sections.length - 1 ? <Divider /> : null}
-          </>
+
+            {section.items.map((item) => (
+              <ListItemButton
+                key={`${item.text}-${sectionIdx}`}
+                component={item?.href ? "a" : undefined}
+                href={item?.href || undefined}
+                onClick={item?.onClick || undefined}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText>{item.text}</ListItemText>
+              </ListItemButton>
+            ))}
+            {sectionIdx < nav.menu.sections.length - 1 ? (
+              <Divider sx={{ mb: 0.5 }} />
+            ) : null}
+          </List>
         );
       })}
 
       {/* The bottom items of the navigation */}
 
-      <List
-        key="NAV_BOTTOM"
-        style={{ position: "absolute", bottom: 0, width: "100%" }}
-      >
+      <List style={{ position: "absolute", bottom: 0, width: "100%" }}>
         {nav.menu.bottom.map((item) => (
           <ListItemButton
-            key={item.text}
+            key={`${item.text}-bottom_nav`}
             component={item?.href ? "a" : undefined}
             href={item?.href || undefined}
             onClick={item?.onClick || undefined}
@@ -118,7 +111,7 @@ const ToggleDrawer = ({ position, nav }) => {
   );
 
   return (
-    <Fragment>
+    <>
       <IconButton onClick={toggleDrawer(true)}>
         <MenuIcon
           size="large"
@@ -131,7 +124,7 @@ const ToggleDrawer = ({ position, nav }) => {
       <Drawer anchor={position} open={isOpen} onClose={toggleDrawer(false)}>
         {makeNavigationList({ position, nav })}
       </Drawer>
-    </Fragment>
+    </>
   );
 };
 
