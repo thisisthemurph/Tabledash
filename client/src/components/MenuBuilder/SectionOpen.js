@@ -1,29 +1,33 @@
-import { useEffect, useState } from "react";
-
+import { useContext, useEffect, useState } from "react";
 import { Button, IconButton, TextField, Stack } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import Item from "./Item";
 import BooleanAlert from "../BooleanAlert";
+import { SectionContext, ItemContext } from "./MenuBuilderContext";
 
-const SectionEditable = ({
-  sectionIndex,
-  name,
-  description,
-  items,
-  closeSection,
-  updateSection,
-  deleteSection,
-  addItem,
-  updateItem,
-  deleteItem,
-}) => {
+const SectionEditable = ({ sectionIndex, name, description, items }) => {
   const [canAddNewItem, setCanAddNewItem] = useState(false);
-  const [itemEditIndex, setItemEditIndex] = useState(-1);
   const [deleteAlertOpen, setDeleteAlertOpen] = useState(false);
 
-  const validate = ({ name, description, price }) => {
+  const {
+    handleCloseSection,
+    itemEditIndex,
+    handleUpdateSection,
+    handleDeleteSection,
+    handleAddItem,
+  } = useContext(SectionContext);
+
+  /**
+   * Determines if the given item object is valid
+   * @param {Object[]} item the item Object to be validated
+   * @param {String} item.name the name of the item
+   * @param {String} item.description the item description
+   * @param {Number} item.price the item price
+   * @returns true if valid, else false
+   */
+  const validateItem = ({ name, description, price }) => {
     if (name.length < 3) return false;
     if (description.length > 160) return false;
     if (isNaN(price)) return false;
@@ -33,27 +37,8 @@ const SectionEditable = ({
   };
 
   useEffect(() => {
-    setCanAddNewItem(items.every((item) => validate({ ...item }) === true));
+    setCanAddNewItem(items.every((item) => validateItem({ ...item }) === true));
   }, [JSON.stringify(items)]);
-
-  const handleUpdateSection = (key, e) => {
-    updateSection(sectionIndex, key, e.target.value);
-  };
-
-  const handleAddItem = (e, sectionIndex) => {
-    setCanAddNewItem(false);
-    setItemEditIndex(items.length);
-    addItem(e, sectionIndex);
-  };
-
-  const handleSetEditingItem = (e, itemIndex) => {
-    e.preventDefault();
-    setItemEditIndex(itemIndex);
-  };
-
-  const handleCloseAllItems = (e) => {
-    handleSetEditingItem(e, -1);
-  };
 
   return (
     <>
@@ -62,7 +47,7 @@ const SectionEditable = ({
         body="Are you sure you want to delete this section? This cannot be undone!"
         open={deleteAlertOpen}
         handleClose={() => setDeleteAlertOpen(false)}
-        onConfirm={(e) => deleteSection(e, sectionIndex)}
+        onConfirm={handleDeleteSection}
         noValue="Cancel"
         yesValue="Delete"
       />
@@ -76,7 +61,7 @@ const SectionEditable = ({
           >
             <DeleteIcon />
           </Button>
-          <IconButton onClick={closeSection}>
+          <IconButton onClick={handleCloseSection}>
             <ExpandLessIcon />
           </IconButton>
         </Stack>
@@ -86,7 +71,7 @@ const SectionEditable = ({
           label="Section Title"
           variant="outlined"
           value={name}
-          onChange={(e) => handleUpdateSection("name", e)}
+          onChange={(e) => handleUpdateSection("name", e.target.value)}
         />
 
         <TextField
@@ -96,24 +81,22 @@ const SectionEditable = ({
           value={description}
           multiline
           rows={2}
-          onChange={(e) => handleUpdateSection("description", e)}
+          onChange={(e) => handleUpdateSection("description", e.target.value)}
         />
 
         <Stack direction="column" spacing={2}>
           {items.map((item, idx) => (
-            <Item
-              key={idx}
-              itemIndex={idx}
-              sectionIndex={sectionIndex}
-              name={item.name}
-              description={item.description}
-              price={item.price > 0 ? item.price / 100 : item.price}
-              editMode={itemEditIndex === idx}
-              activateEditMode={(e) => handleSetEditingItem(e, idx)}
-              updateItem={updateItem}
-              deleteItem={deleteItem}
-              closeItem={handleCloseAllItems}
-            />
+            <ItemContext.Provider key={idx} value={{}}>
+              <Item
+                key={idx}
+                itemIndex={idx}
+                sectionIndex={sectionIndex}
+                name={item.name}
+                description={item.description}
+                price={item.price > 0 ? item.price / 100 : item.price}
+                editMode={itemEditIndex === idx}
+              />
+            </ItemContext.Provider>
           ))}
 
           <Button

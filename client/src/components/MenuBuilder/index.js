@@ -1,27 +1,9 @@
 import { useState } from "react";
-
 import { Stack, TextField, Button } from "@mui/material";
 import { Box } from "@mui/system";
 
 import Section from "./Section";
-
-const initialItem = {
-  name: "",
-  description: "",
-  price: 0,
-};
-
-const initialSection = {
-  name: "",
-  description: "",
-  items: [initialItem],
-};
-
-const initialMenu = {
-  name: "",
-  description: "",
-  sections: [initialSection],
-};
+import { MenuContext, initialMenu, initialSection } from "./MenuBuilderContext";
 
 const tempMenu = {
   name: "Tiffins Takeaway",
@@ -37,7 +19,7 @@ const tempMenu = {
           price: 949,
         },
         {
-          name: "Saussage and Chips",
+          name: "Sausage and Chips",
           description: "A large sausage and chips",
           price: 649,
         },
@@ -55,87 +37,21 @@ const MenuBuilder = () => {
   const [menu, setMenu] = useState(tempMenu || initialMenu);
   const [activeSectionIndex, setActiveSectionIndex] = useState(-1);
 
-  const handleAddItem = (e, sectionIndex) => {
-    e.preventDefault();
-    setMenu({
-      ...menu,
-      sections: menu.sections.map((section, idx) => {
-        if (idx !== sectionIndex) return section;
-        return { ...section, items: [...section.items, initialItem] };
-      }),
-    });
-  };
-
-  const handleUpdateItemInfo = (sectionIndex, itemIndex, key, value) => {
-    if (key === "price") {
-      value = Math.floor(value * 100);
-    }
-
-    setMenu({
-      ...menu,
-      sections: menu.sections.map((section, sectionIdx) => {
-        if (sectionIdx !== sectionIndex) return section;
-        return {
-          ...section,
-          items: section.items.map((item, itemIdx) => {
-            if (itemIdx !== itemIndex) return item;
-            return { ...item, [key]: value };
-          }),
-        };
-      }),
-    });
-  };
-
-  const handleDeleteItem = (e, sectionIndex, itemIndex) => {
-    e.preventDefault();
-    setMenu({
-      ...menu,
-      sections: menu.sections.map((section, sectionIdx) => {
-        if (sectionIdx !== sectionIndex) return section;
-        return {
-          ...section,
-          items: section.items.filter((_, itemIdx) => itemIdx !== itemIndex),
-        };
-      }),
-    });
-  };
-
   const handleAddSection = (e) => {
     e.preventDefault();
     setMenu({ ...menu, sections: [...menu.sections, initialSection] });
     setActiveSectionIndex(menu.sections.length);
   };
 
-  const handleActivateSection = (e, sectionIndex) => {
-    e.preventDefault();
-    setActiveSectionIndex(sectionIndex);
-  };
-
-  const handleUpdateSection = (sectionIndex, key, value) => {
-    setMenu({
-      ...menu,
-      sections: menu.sections.map((section, idx) => {
-        return idx === sectionIndex ? { ...section, [key]: value } : section;
-      }),
-    });
-  };
-
-  const handleDeleteSection = (e, index) => {
-    e.preventDefault();
-
-    if (menu.sections.length === 1) {
-      alert("You must have at least one section in the menu.");
-      return;
-    }
-
-    setMenu({
-      ...menu,
-      sections: menu.sections.filter((_, idx) => idx !== index),
-    });
-  };
-
   const updateMenuInfo = (key, e) => {
     setMenu({ ...menu, [key]: e.target.value });
+  };
+
+  const menuContext = {
+    menu,
+    setMenu,
+    activeSectionIndex,
+    setActiveSectionIndex,
   };
 
   return (
@@ -160,25 +76,19 @@ const MenuBuilder = () => {
         />
       </Stack>
 
-      <Stack direction="column" spacing={2}>
-        {menu.sections.map((section, idx) => (
-          <Section
-            key={idx}
-            index={idx}
-            name={section.name}
-            description={section.description}
-            items={section.items}
-            isOpen={activeSectionIndex === idx}
-            open={(e) => handleActivateSection(e, idx)}
-            closeSection={(e) => setActiveSectionIndex(e, -1)}
-            updateSection={handleUpdateSection}
-            deleteSection={handleDeleteSection}
-            addItem={handleAddItem}
-            updateItem={handleUpdateItemInfo}
-            deleteItem={handleDeleteItem}
-          />
-        ))}
-      </Stack>
+      <MenuContext.Provider value={menuContext}>
+        <Stack direction="column" spacing={2}>
+          {menu.sections.map((section, idx) => (
+            <Section
+              key={idx}
+              sectionIndex={idx}
+              name={section.name}
+              description={section.description}
+              items={section.items}
+            />
+          ))}
+        </Stack>
+      </MenuContext.Provider>
 
       <Stack direction="row" className="section">
         <Button

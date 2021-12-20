@@ -1,7 +1,12 @@
+import { useContext } from "react";
 import { IconButton, Stack, Typography } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const SectionNonEditable = ({ name, description, handleOpenSection }) => {
+import { SectionContext } from "./MenuBuilderContext";
+
+const SectionNonEditable = ({ name, description }) => {
+  const { handleOpenSection } = useContext(SectionContext);
+
   return (
     <Stack className="section">
       <Stack direction="row" justifyContent="space-between">

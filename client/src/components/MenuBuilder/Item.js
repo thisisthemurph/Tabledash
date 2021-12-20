@@ -1,5 +1,5 @@
-import ItemEditable from "./ItemEditable";
-import ItemNonEditable from "./ItemNonEditable";
+import ItemOpen from "./ItemOpen";
+import ItemClosed from "./ItemClosed";
 
 const Item = ({
   itemIndex,
@@ -8,39 +8,26 @@ const Item = ({
   description,
   price,
   editMode,
-  closeItem,
-  updateItem,
-  deleteItem,
-  activateEditMode,
 }) => {
-  const handleUpdateItem = (e, key) => {
-    updateItem(sectionIndex, itemIndex, key, e.target.value);
-  };
-
   if (editMode) {
     return (
-      <ItemEditable
+      <ItemOpen
         itemIndex={itemIndex}
         sectionIndex={sectionIndex}
         name={name}
         description={description}
         price={price}
-        deleteItem={deleteItem}
-        handleClose={closeItem}
-        handleUpdateItem={handleUpdateItem}
       />
     );
   }
 
   return (
-    <ItemNonEditable
+    <ItemClosed
       itemIndex={itemIndex}
       sectionIndex={sectionIndex}
-      name={name || "Add a name for this item"}
-      description={description || "No description."}
-      price={price || "-"}
-      activateEditMode={activateEditMode}
-      deleteItem={deleteItem}
+      name={name}
+      description={description}
+      price={price}
     />
   );
 };
