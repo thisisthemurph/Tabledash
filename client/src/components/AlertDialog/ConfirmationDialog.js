@@ -25,12 +25,12 @@ const ConfirmationDialog = ({
     <Dialog
       open={open}
       onClose={handleClose}
-      aria-labelledby="Deleting item"
-      aria-describedby="Are you sure youy would like to delete this item?"
+      aria-labelledby="dialogTitle"
+      aria-describedby="dialogContent"
     >
-      <DialogTitle>{title}</DialogTitle>
+      <DialogTitle id="dialogTitle">{title}</DialogTitle>
       <DialogContent>
-        <DialogContentText>{body}</DialogContentText>
+        <DialogContentText id="dialogContent">{body}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>
