@@ -5,15 +5,18 @@ import CreateRestaurant from "../components/CreateRestaurant";
 import ProtectedRoute from "../components/ProtectedRoute";
 import { RestaurantContext } from "../context/RestaurantContext";
 import { UserContext } from "../context/UserContext";
+import useStyles from "../hooks/useStyles";
 
 const Dashboard = () => {
+  const styles = useStyles();
+
   const { user } = useContext(UserContext);
   const { restaurant } = useContext(RestaurantContext);
   const { restaurant: restaurantId } = user;
 
   return (
     <ProtectedRoute>
-      <h1 className="section">Dashboard</h1>
+      <h1 className={styles.container}>Dashboard</h1>
 
       {!restaurantId && <CreateRestaurant />}
 

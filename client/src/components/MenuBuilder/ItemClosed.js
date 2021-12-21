@@ -1,14 +1,17 @@
 import { useContext } from "react";
+import clsx from "clsx";
 import { IconButton, Grid, Paper } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { SectionContext } from "./MenuBuilderContext";
+import useStyles from "../../hooks/useStyles";
 
 const ItemNonEditable = ({ itemIndex, name, description, price }) => {
   const { setItemEditIndex } = useContext(SectionContext);
+  const styles = useStyles();
 
   return (
-    <Paper className="section">
+    <Paper className={clsx(styles.container, styles.menuItem)}>
       <Grid container>
         <Grid item xs={11}>
           <h3>{name}</h3>

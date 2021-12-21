@@ -61,7 +61,10 @@ const ItemEditable = ({
   };
 
   return (
-    <Paper elevation={4} className="section">
+    <Paper
+      elevation={4}
+      className="section menubuilder__item menubuilder__item--open"
+    >
       <ConfirmationDialog
         title="Deleting item..."
         body={`Are you sure you would like to delete "${name}". It will not be possible to undo this action.`}
@@ -75,10 +78,10 @@ const ItemEditable = ({
       <Stack spacing={2}>
         <Stack direction="row" justifyContent="space-between">
           <ButtonGroup>
-            <Button>
+            <Button color="secondary">
               <ArrowUpwardIcon />
             </Button>
-            <Button>
+            <Button color="secondary">
               <ArrowDownwardIcon />
             </Button>
             <Button color="error" onClick={() => setDeleteItemAlertOpen(true)}>

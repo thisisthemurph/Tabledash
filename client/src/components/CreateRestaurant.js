@@ -2,12 +2,14 @@ import { useContext, useState } from "react";
 
 import { createRestaurant } from "../api/restaurant";
 import { UserContext } from "../context/UserContext";
+import useStyles from "../hooks/useStyles";
 
 const defaultFormValues = {
   name: "",
 };
 
 const CreateRestaurant = () => {
+  const styles = useStyles();
   const { user, setUser } = useContext(UserContext);
 
   const [error, setError] = useState(null);
@@ -49,7 +51,7 @@ const CreateRestaurant = () => {
   };
 
   return (
-    <div className="section">
+    <div className={styles.container}>
       <h2>New Restaurant</h2>
       <p>
         You need to add some details about your restaurant before we can

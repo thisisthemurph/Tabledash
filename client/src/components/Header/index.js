@@ -1,10 +1,13 @@
 import { AppBar, Box, Button, Stack, Toolbar, Typography } from "@mui/material";
+import useStyles from "../../hooks/useStyles";
 import NavSideBar from "./NavSideBar";
 
 const Header = ({ isDarkMode, toggleTheme }) => {
+  const styles = useStyles();
+
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" className={styles.header}>
         <Toolbar>
           <NavSideBar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

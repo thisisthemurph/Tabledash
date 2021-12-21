@@ -8,15 +8,15 @@ const SectionNonEditable = ({ name, description }) => {
   const { handleOpenSection } = useContext(SectionContext);
 
   return (
-    <Stack className="section">
+    <>
       <Stack direction="row" justifyContent="space-between">
         <Typography variant="h6">{name}</Typography>
         <IconButton onClick={handleOpenSection}>
-          <ExpandMoreIcon />
+          <ExpandMoreIcon fontSize="large" />
         </IconButton>
       </Stack>
       <Typography variant="subtitle1">{description}</Typography>
-    </Stack>
+    </>
   );
 };
 

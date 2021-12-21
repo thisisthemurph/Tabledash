@@ -4,6 +4,7 @@ import { Box } from "@mui/system";
 
 import Section from "./Section";
 import { MenuContext, initialMenu, initialSection } from "./MenuBuilderContext";
+import useStyles from "../../hooks/useStyles";
 
 const tempMenu = {
   name: "Tiffins Takeaway",
@@ -30,12 +31,34 @@ const tempMenu = {
         },
       ],
     },
+    {
+      name: "Drinks",
+      description: "The drinks menu.",
+      items: [
+        {
+          name: "Coke",
+          description: "",
+          price: 199,
+        },
+        {
+          name: "Fanta",
+          description: "",
+          price: 199,
+        },
+        {
+          name: "Homemade Lemonade",
+          description: "",
+          price: 250,
+        },
+      ],
+    },
   ],
 };
 
 const MenuBuilder = () => {
   const [menu, setMenu] = useState(tempMenu || initialMenu);
   const [activeSectionIndex, setActiveSectionIndex] = useState(-1);
+  const classes = useStyles();
 
   const handleAddSection = (e) => {
     e.preventDefault();
@@ -56,7 +79,7 @@ const MenuBuilder = () => {
 
   return (
     <Box component="form">
-      <Stack className="section" direction="column" spacing={2}>
+      <Stack className={classes.container} direction="column" spacing={2}>
         <h2>Menu Builder</h2>
 
         <TextField
@@ -90,11 +113,11 @@ const MenuBuilder = () => {
         </Stack>
       </MenuContext.Provider>
 
-      <Stack direction="row" className="section">
+      <Stack direction="row" className={classes.container}>
         <Button
           fullWidth
           variant="outlined"
-          color="primary"
+          color="secondary"
           onClick={handleAddSection}
         >
           Add New Section

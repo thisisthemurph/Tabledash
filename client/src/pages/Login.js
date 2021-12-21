@@ -2,6 +2,7 @@ import { Button, Stack, TextField } from "@mui/material";
 import { useContext, useState } from "react";
 
 import { UserContext } from "../context/UserContext";
+import useStyles from "../hooks/useStyles";
 
 const defaultFormValues = {
   username: "",
@@ -10,6 +11,7 @@ const defaultFormValues = {
 
 const Login = () => {
   const { login } = useContext(UserContext);
+  const classes = useStyles();
 
   const [error, setError] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
@@ -57,7 +59,7 @@ const Login = () => {
       component="form"
       spacing={2}
       onSubmit={handleSubmit}
-      className="section"
+      className={classes.container}
     >
       <h2>Login</h2>
       {error ? (

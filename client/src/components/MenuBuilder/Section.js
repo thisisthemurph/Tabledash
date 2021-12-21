@@ -1,8 +1,11 @@
 import { useContext, useState } from "react";
+import { Stack } from "@mui/material";
+import clsx from "clsx";
 
-import { NotificationDialog } from "../AlertDialog";
 import SectionOpen from "./SectionOpen";
 import SectionClosed from "./SectionClosed";
+import useStyles from "../../hooks/useStyles";
+import { NotificationDialog } from "../AlertDialog";
 import { MenuContext, SectionContext, initialItem } from "./MenuBuilderContext";
 
 const Section = ({ sectionIndex, name, description, items }) => {
@@ -10,6 +13,8 @@ const Section = ({ sectionIndex, name, description, items }) => {
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const { menu, setMenu, activeSectionIndex, setActiveSectionIndex } =
     useContext(MenuContext);
+
+  const styles = useStyles();
 
   const handleUpdateSection = (key, value) => {
     setMenu({
@@ -71,25 +76,32 @@ const Section = ({ sectionIndex, name, description, items }) => {
   if (activeSectionIndex === sectionIndex) {
     return (
       <SectionContext.Provider value={openSectionContext}>
-        <NotificationDialog
-          title="Cannot Delete Section"
-          body="There must be at least one section in the menu."
-          handleClose={() => setShowDeleteConfirmation(false)}
-          open={showDeleteConfirmation}
-        />
-        <SectionOpen
-          sectionIndex={sectionIndex}
-          name={name}
-          description={description}
-          items={items}
-        />
+        <Stack
+          className={clsx(styles.container, styles.menuSection)}
+          spacing={2}
+        >
+          <NotificationDialog
+            title="Cannot Delete Section"
+            body="There must be at least one section in the menu."
+            handleClose={() => setShowDeleteConfirmation(false)}
+            open={showDeleteConfirmation}
+          />
+          <SectionOpen
+            sectionIndex={sectionIndex}
+            name={name}
+            description={description}
+            items={items}
+          />
+        </Stack>
       </SectionContext.Provider>
     );
   }
 
   return (
     <SectionContext.Provider value={closedSectionContext}>
-      <SectionClosed name={name} description={description} />
+      <Stack className={clsx(styles.container, styles.menuSection)}>
+        <SectionClosed name={name} description={description} />
+      </Stack>
     </SectionContext.Provider>
   );
 };

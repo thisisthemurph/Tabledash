@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router";
 
 import client from "../api/api-client";
+import useStyles from "../hooks/useStyles";
 
 const defaultFormValues = {
   name: "",
@@ -14,6 +15,7 @@ const defaultFormValues = {
 
 const Register = () => {
   const navigate = useNavigate();
+  const classes = useStyles();
 
   const [error, setError] = useState(null);
   const [canSubmit, setCanSubmit] = useState(false);
@@ -78,7 +80,7 @@ const Register = () => {
       component="form"
       spacing={2}
       onSubmit={handleSubmit}
-      className="section"
+      className={classes.container}
     >
       <h2>Register</h2>
 

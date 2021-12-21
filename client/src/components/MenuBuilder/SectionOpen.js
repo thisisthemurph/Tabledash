@@ -5,7 +5,8 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 
 import Item from "./Item";
 import { ConfirmationDialog } from "../AlertDialog";
-import { SectionContext, ItemContext } from "./MenuBuilderContext";
+import { SectionContext } from "./MenuBuilderContext";
+import { Box } from "@mui/system";
 
 const SectionEditable = ({ sectionIndex, name, description, items }) => {
   const [canAddNewItem, setCanAddNewItem] = useState(false);
@@ -51,63 +52,60 @@ const SectionEditable = ({ sectionIndex, name, description, items }) => {
         rejectBtnText="Cancel"
         confirmBtnText="Delete"
       />
-
-      <Stack className="section" spacing={2}>
-        <Stack direction="row" justifyContent="space-between">
-          <Button
-            variant="outlined"
-            onClick={() => setDeleteAlertOpen(true)}
-            color="error"
-          >
-            <DeleteIcon />
-          </Button>
-          <IconButton onClick={handleCloseSection}>
-            <ExpandLessIcon />
-          </IconButton>
-        </Stack>
-
-        <TextField
-          fullWidth
-          label="Section Title"
+      <Stack direction="row" justifyContent="space-between" spacing={2}>
+        <Button
           variant="outlined"
-          value={name}
-          onChange={(e) => handleUpdateSection("name", e.target.value)}
-        />
+          onClick={() => setDeleteAlertOpen(true)}
+          color="error"
+        >
+          <DeleteIcon />
+        </Button>
+        <IconButton onClick={handleCloseSection}>
+          <ExpandLessIcon fontSize="large" />
+        </IconButton>
+      </Stack>
 
-        <TextField
-          fullWidth
-          label="Section Description"
-          variant="outlined"
-          value={description}
-          multiline
-          rows={2}
-          onChange={(e) => handleUpdateSection("description", e.target.value)}
-        />
+      <TextField
+        fullWidth
+        label="Section Title"
+        variant="outlined"
+        value={name}
+        onChange={(e) => handleUpdateSection("name", e.target.value)}
+      />
 
-        <Stack direction="column" spacing={2}>
-          {items.map((item, idx) => (
-            <ItemContext.Provider key={idx} value={{}}>
-              <Item
-                key={idx}
-                itemIndex={idx}
-                sectionIndex={sectionIndex}
-                name={item.name}
-                description={item.description}
-                price={item.price > 0 ? item.price / 100 : item.price}
-                editMode={itemEditIndex === idx}
-              />
-            </ItemContext.Provider>
-          ))}
+      <TextField
+        fullWidth
+        label="Section Description"
+        variant="outlined"
+        value={description}
+        multiline
+        rows={2}
+        onChange={(e) => handleUpdateSection("description", e.target.value)}
+      />
 
+      <Stack direction="column" spacing={2}>
+        {items.map((item, idx) => (
+          <Item
+            key={idx}
+            itemIndex={idx}
+            sectionIndex={sectionIndex}
+            name={item.name}
+            description={item.description}
+            price={item.price > 0 ? item.price / 100 : item.price}
+            editMode={itemEditIndex === idx}
+          />
+        ))}
+
+        <Box display="flex" flexDirection="row-reverse">
           <Button
             variant="contained"
-            color="primary"
+            color="secondary"
             onClick={(e) => handleAddItem(e, sectionIndex)}
             disabled={!canAddNewItem}
           >
             Add New Item
           </Button>
-        </Stack>
+        </Box>
       </Stack>
     </>
   );
